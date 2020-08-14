@@ -1,2 +1,0 @@
-# cppproject
-ok
