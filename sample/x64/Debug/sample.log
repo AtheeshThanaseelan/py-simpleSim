@@ -1,0 +1,3 @@
+﻿  Using triplet "x64-windows" from "C:\Users\tourist\stuff\C\vcpkg\installed\x64-windows\"
+  Source.cpp
+C:\Users\tourist\stuff\C\cppproject-split\sample\Source.cpp(3,10): fatal error C1083: Cannot open include file: 'bullet/btBulletDynamicsCommon.h': No such file or directory
