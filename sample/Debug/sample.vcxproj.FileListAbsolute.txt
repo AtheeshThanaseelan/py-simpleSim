@@ -1,2 +1,0 @@
-C:\Users\tourist\source\repos\sample\sample\Debug\sample.vcxproj.CopyComplete
-C:\Users\tourist\stuff\C\cppproject-split\sample\Debug\sample.vcxproj.CopyComplete

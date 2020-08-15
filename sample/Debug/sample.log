@@ -1,5 +1,0 @@
-﻿  Using triplet "x86-windows" from "C:\Users\tourist\stuff\C\vcpkg\installed\x86-windows\"
-  Source.cpp
-C:\Users\tourist\stuff\C\cppproject-split\sample\Source.cpp(218,21): warning C4244: 'argument': conversion from 'irr::f32' to 'irr::u32', possible loss of data
-C:\Users\tourist\stuff\C\cppproject-split\sample\Source.cpp(254,1): warning C4305: 'argument': truncation from 'double' to 'const btScalar'
-  sample.vcxproj -> C:\Users\tourist\stuff\C\cppproject-split\Debug\sample.exe
