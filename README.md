@@ -5,7 +5,7 @@ Done:
 - Object Creation
 
 Todo:
-- Bullet Compound objects
+- Bullet Physics Compound objects
 - Pathfinding
 - Scripting
 
