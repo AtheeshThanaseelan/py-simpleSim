@@ -11,36 +11,13 @@ box_obj::box_obj(world* world) :obj_world(world)
 
 	btScalar mass(3.f);
 
-	startTransform.setOrigin(btVector3(10, 40, 20));
+	startTransform.setOrigin(btVector3(0, 40, 0));
 	//btQuaternion quat(btVector3(0.4, .02, .1), 67);
 	btQuaternion quat(btVector3(1, 1, 1), 67); //rotat
 	startTransform.setRotation(quat);
 
-
-	btAssert((!colShape || colShape->getShapeType() != INVALID_SHAPE_PROXYTYPE));
-
-	//rigidbody is dynamic if and only if mass is non zero, otherwise static
-	bool isDynamic = (mass != 0.f);
-
-	btVector3 localInertia(0, 0, 0);
-	colShape->calculateLocalInertia(mass, localInertia);
-
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-
-	btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, colShape, localInertia);
-
-	btRigidBody* body = new btRigidBody(cInfo);
-	body->setFriction(1);
-	body->setUserIndex(10);
-	obj_world->dynamicsWorld->addRigidBody(body);
-
-	IMeshSceneNode* cubeNode = world->scenemgr->addCubeSceneNode(10.0f, NULL, -1, vector3df(0, 3, 10));
-	cubeNode->setMaterialType(EMT_SOLID);
-	cubeNode->setMaterialTexture(0, world->driver->getTexture("../textures/box.jpg"));
-	cubeNode->setMaterialFlag(video::EMF_LIGHTING, false);
-	cubeNode->setVisible(true);
-	//saving the visual node to the physics node  
-	body->setUserPointer(cubeNode);
+	btRigidBody* body = createRigidBody(world, mass, startTransform, colShape);
+	body->setUserPointer(create_node(world));
 }
 
 terrain_obj::terrain_obj(world* world) :obj_world(world)
@@ -53,27 +30,13 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 	groundTransform.setIdentity();
 	groundTransform.setOrigin(btVector3(0, -56, 0));
 
+
 	btScalar mass(0.);
-
-	btVector3 localInertia(0, 0, 0);
-
-	btAssert((!groundShape || groundShape->getShapeType() != INVALID_SHAPE_PROXYTYPE));
-
-
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
-
-	btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, groundShape, localInertia);
-
-	btRigidBody* body = new btRigidBody(cInfo);
-	//body->setContactProcessingThreshold(m_defaultContactProcessingThreshold);
-
-	body->setUserIndex(-1);
-
-	body->setUserIndex(5);
+	
+	btRigidBody* body = createRigidBody(world, mass, groundTransform, groundShape);
+	
 	body->setFriction(1);
-
-	//add the body to the dynamics world
-	obj_world->dynamicsWorld->addRigidBody(body);
+	body->setUserIndex(5);
 
 	IAnimatedMesh* hillPlaneMesh = obj_world->scenemgr->addHillPlaneMesh("myHill",
 		core::dimension2d<f32>(30, 30),

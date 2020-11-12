@@ -4,6 +4,7 @@
 #include <bullet/btBulletDynamicsCommon.h>
 #include <irrlicht/irrlicht.h>
 #include <string>
+#include <iostream>
 
 using namespace irr;
 using namespace core;

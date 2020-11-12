@@ -1,5 +1,9 @@
 #include "base_utils.h"
 
+/*
+Bring World & Key controller back to main?
+*/
+
 //Key Controller
 bool key_controller::OnEvent(const SEvent& event)
 {
@@ -9,6 +13,7 @@ bool key_controller::OnEvent(const SEvent& event)
 
 	return false;
 }
+
 
 // This is used to check whether a key is being held down
 bool key_controller::IsKeyDown(EKEY_CODE keyCode) const
@@ -71,6 +76,8 @@ world::world(key_controller* controller)
 
 void world::update()
 {
+	const u32 now = device->getTimer()->getTime();
+
 	int numOfObjects = dynamicsWorld->getNumCollisionObjects();
 	for (int j = numOfObjects - 1; j >= 0; j--)
 	{
@@ -95,20 +102,14 @@ void world::update()
 		}
 	}
 
-	const u32 now = device->getTimer()->getTime();
-
-	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
-
 	driver->beginScene(true, true, video::SColor(255, 0, 0, 255));
 	scenemgr->drawAll();
 	guienv->drawAll();
 	driver->endScene();
 
-	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 10);
-
-	if ((frameDeltaTime * 1000) < 25)
-		device->sleep(25 - (frameDeltaTime * 1000));
-
+	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
+	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 10, 0.03333333f);
+	
 	then = now;
 }
 
@@ -123,3 +124,4 @@ void world::framerate()
 		device->setWindowCaption(titlebar.c_str());
 	}
 }
+
