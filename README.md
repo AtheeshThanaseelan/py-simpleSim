@@ -1,4 +1,4 @@
-# c++ physics project with no name
+# c++ physics project
 
 Done:
 - Initilization
