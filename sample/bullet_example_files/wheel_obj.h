@@ -16,10 +16,10 @@ subject to the following restrictions:
 *
 * It is ALTERED
 */
-
+#pragma once
 #include "..\base_utils.h"
-
-class wheel_obj 
+#include "..\object_utils.h"
+class wheel_obj : public main_obj
 {
 public:
 	float wheelRadius = 0.5f;
@@ -37,7 +37,9 @@ public:
 
 	wheel_obj(world* world);
 
-	void run(key_controller controller);
+	void forward();
+
+	void stop();
 
 	btHinge2Constraint* pHingeStore[4];
 };

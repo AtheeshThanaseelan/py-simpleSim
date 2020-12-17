@@ -58,3 +58,10 @@ public:
 
 
 };
+
+class main_obj
+{
+public:
+	virtual void forward();
+	virtual void stop();
+};

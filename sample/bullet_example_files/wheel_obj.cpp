@@ -19,8 +19,6 @@ subject to the following restrictions:
 
 
 #include "wheel_obj.h"
-#include "..\base_utils.h"
-#include "..\object_utils.h"
 
 //MCLPSolver ?
 #define CUBE_HALF_EXTENTS 1
@@ -56,6 +54,7 @@ wheel_obj::wheel_obj(world *world)
 		btVector3(btScalar(10.), btScalar(FALLHEIGHT - 5), btScalar(10.25)),
 		btVector3(btScalar(10.), btScalar(FALLHEIGHT - 5), btScalar(-10.25)),
 		btVector3(btScalar(-10.), btScalar(FALLHEIGHT - 5), btScalar(-10.25)) };
+	int size[3] = { 3,3,3 };
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -99,21 +98,26 @@ wheel_obj::wheel_obj(world *world)
 		pHinge2->setDbgDrawSize(btScalar(5.f));
 
 		//saving the visual node to the physics node  
-		pBodyB->setUserPointer(create_node(world));
+		
+		pBodyB->setUserPointer(create_node(world, size));
 	}
 	//saving the visual node to the physics node  
-	m_carChassis->setUserPointer(create_node(world));
+	m_carChassis->setUserPointer(create_node(world, size));
 }
 
-void wheel_obj::run(key_controller controller)
+void wheel_obj::forward()
 {
-	if (controller.IsKeyDown(KEY_KEY_W))
-	{
 		for (int i = 0; i < 4; i++)
 		{
 			pHingeStore[i]->setTargetVelocity(3, 100);
 			std::cout << std::endl;
 		}
-		controller.clear(KEY_KEY_W);
+}
+
+void wheel_obj::stop()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		pHingeStore[i]->setTargetVelocity(3, 0);
 	}
 }

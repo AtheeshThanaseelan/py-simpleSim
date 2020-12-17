@@ -59,7 +59,7 @@ world::world(key_controller* controller)
 	///-----initialization_end-----
 
 	device = createDevice(video::EDT_OPENGL,
-		dimension2d<u32>(800, 600), 32, false, false, false, controller);
+		dimension2d<u32>(800, 600), 32, false, false, true, controller);
 	driver = device->getVideoDriver();
 	scenemgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
@@ -107,8 +107,13 @@ void world::update()
 	guienv->drawAll();
 	driver->endScene();
 
+
 	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
-	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 10, 0.03333333f);
+
+	if (frameDeltaTime > 0.1)
+		std::cout << frameDeltaTime << std::endl;
+
+	dynamicsWorld->stepSimulation(frameDeltaTime / 2, 0, 0.03333333f/16);
 	
 	then = now;
 }
@@ -123,5 +128,17 @@ void world::framerate()
 		titlebar += fps;
 		device->setWindowCaption(titlebar.c_str());
 	}
+}
+
+
+
+void main_obj::forward()
+{
+	
+}
+
+void main_obj::stop()
+{
+
 }
 

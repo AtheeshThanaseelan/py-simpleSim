@@ -1,9 +1,11 @@
 #include "object_utils.h"
 
 
-IMeshSceneNode* create_node(world* world)
+
+IMeshSceneNode* create_node(world* world, int size[3])
 {
-	IMeshSceneNode* cubeNode = world->scenemgr->addCubeSceneNode(5.0f, NULL, -1, vector3df(0, 3, 10));
+	std::cout << size[0];
+	IMeshSceneNode* cubeNode = world->scenemgr->addCubeSceneNode(1.0f,0,0,vector3df(0,0,0), vector3df(0, 0, 0), vector3df(size[0]*2, size[1]*2, size[2]*2));
 	cubeNode->setMaterialType(EMT_SOLID);
 	cubeNode->setMaterialTexture(0, world->driver->getTexture("../textures/box.jpg"));
 	cubeNode->setMaterialFlag(video::EMF_LIGHTING, false);
