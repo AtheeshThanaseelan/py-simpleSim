@@ -20,6 +20,26 @@ box_obj::box_obj(world* world,int size[3], int pos[3], int mass_param) :obj_worl
 
 	irr_body = create_node(world, size);
 	body->setUserPointer(irr_body);
+
+	delete size;
+	delete pos;
+}
+
+box_obj::~box_obj()
+{
+	if (body && body->getMotionState())
+	{
+		delete body->getMotionState();
+	}
+	obj_world->dynamicsWorld->removeCollisionObject(body);
+
+	btCollisionShape* shape = body->getCollisionShape();
+	obj_world->collisionShapes.remove(shape);
+	delete shape;
+
+	obj_world->dynamicsWorld->removeRigidBody(body);
+	obj_world->scenemgr->addToDeletionQueue(irr_body);
+	delete body;
 }
 
 void box_obj::forward()
@@ -36,6 +56,8 @@ void box_obj::stop()
 		body->applyCentralImpulse(f);
 }
 
+
+
 terrain_obj::terrain_obj(world* world) :obj_world(world)
 {
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1000.), btScalar(1.), btScalar(1000.)));
@@ -49,7 +71,7 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 
 	btScalar mass(0.);
 	
-	btRigidBody* body = createRigidBody(world, mass, groundTransform, groundShape);
+	body = createRigidBody(world, mass, groundTransform, groundShape);
 	
 	body->setFriction(1);
 	body->setUserIndex(5);
@@ -60,8 +82,28 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 		core::dimension2d<f32>(2, 2),
 		core::dimension2d<f32>(100, 100));
 
-	ISceneNode* planeNode = obj_world->scenemgr->addAnimatedMeshSceneNode(hillPlaneMesh);
-	planeNode->setMaterialTexture(0, obj_world->driver->getTexture("../textures/ground.jpg"));
-	planeNode->setMaterialFlag(video::EMF_LIGHTING, false);
-	planeNode->setPosition(core::vector3df(0, 0, 0));
+	irr_planeNode = obj_world->scenemgr->addAnimatedMeshSceneNode(hillPlaneMesh);
+	irr_planeNode->setMaterialTexture(0, obj_world->driver->getTexture("../textures/ground.jpg"));
+	irr_planeNode->setMaterialFlag(video::EMF_LIGHTING, false);
+	irr_planeNode->setPosition(core::vector3df(0, 0, 0));
+}
+
+terrain_obj::~terrain_obj()
+{
+	
+	if (body && body->getMotionState())
+	{
+		delete body->getMotionState();
+	}
+	obj_world->dynamicsWorld->removeCollisionObject(body);
+
+	btCollisionShape* shape = body->getCollisionShape();
+	obj_world->collisionShapes.remove(shape);
+	delete shape;
+
+
+	obj_world->dynamicsWorld->removeRigidBody(body);
+	obj_world->scenemgr->addToDeletionQueue(irr_planeNode);
+
+	delete body;
 }

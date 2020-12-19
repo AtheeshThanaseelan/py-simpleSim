@@ -1,9 +1,5 @@
 #include "base_utils.h"
 
-/*
-Bring World & Key controller back to main?
-*/
-
 //Key Controller
 bool key_controller::OnEvent(const SEvent& event)
 {
@@ -13,7 +9,6 @@ bool key_controller::OnEvent(const SEvent& event)
 
 	return false;
 }
-
 
 // This is used to check whether a key is being held down
 bool key_controller::IsKeyDown(EKEY_CODE keyCode) const
@@ -33,7 +28,6 @@ key_controller::key_controller()
 }
 
 //World
-
 world::world(key_controller* controller) 
 {
 
@@ -54,17 +48,15 @@ world::world(key_controller* controller)
 
 	dynamicsWorld->setGravity(btVector3(0, -10, 0));
 
-	printf("World Made\n\n");
-
 	///-----initialization_end-----
 
 	device = createDevice(video::EDT_OPENGL,
-		dimension2d<u32>(800, 600), 32, false, false, true, controller);
+		dimension2d<u32>(800, 600), 32, false, false, false, controller);
 	driver = device->getVideoDriver();
 	scenemgr = device->getSceneManager();
-	guienv = device->getGUIEnvironment();
+	//guienv = device->getGUIEnvironment();
 	device->setWindowCaption(L"Sample Program");
-	env = device->getGUIEnvironment();
+	//env = device->getGUIEnvironment();
 
 	ICameraSceneNode* cameraNode;
 	cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
@@ -74,8 +66,77 @@ world::world(key_controller* controller)
 	fps = driver->getFPS();
 }
 
+world::~world()
+{
+	
+	device->closeDevice();
+	delete device;
+	for (int count = dynamicsWorld->getNumCollisionObjects() - 1; count>=0; count--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[count];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		dynamicsWorld->removeCollisionObject(obj);
+		delete obj;
+	}
+	for (int count = 0; count < collisionShapes.size(); count++)
+	{
+		btCollisionShape* shape = collisionShapes[count];
+		collisionShapes[count] = 0;
+		delete shape;
+	}
+	delete dynamicsWorld;
+	delete solver;
+	delete overlappingPairCache;
+	delete dispatcher;
+	delete collisionConfiguration;
+}
+
 void world::update()
 {
+	int numOfObjects = dynamicsWorld->getNumCollisionObjects();
+	for (int j = numOfObjects - 1; j >= 0; j--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		btTransform trans;
+
+		body->getMotionState()->getWorldTransform(trans);
+		ISceneNode* cube = reinterpret_cast<ISceneNode*>(body->getUserPointer());
+		if (cube != NULL) {//update cubes only
+			btVector3 origin = trans.getOrigin();
+			//update rotation
+			btQuaternion rot = trans.getRotation();
+			quaternion q(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+			vector3df Euler;
+			q.toEuler(Euler);
+			Euler *= RADTODEG;
+
+			cube->setPosition(vector3df(origin.getX(), origin.getY(), origin.getZ()));
+			cube->setRotation(Euler);
+			cube->setVisible(true);
+		}
+	}
+
+	const u32 now = device->getTimer()->getTime();
+
+	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
+
+	driver->beginScene(true, true, video::SColor(255, 0, 0, 255));
+	scenemgr->drawAll();
+	//guienv->drawAll();
+	driver->endScene();
+
+	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 10);
+
+	//if ((frameDeltaTime * 1000) < 25)
+	//	device->sleep(25 - (frameDeltaTime * 1000));
+
+	then = now;
+	/*
 	const u32 now = device->getTimer()->getTime();
 
 	int numOfObjects = dynamicsWorld->getNumCollisionObjects();
@@ -104,7 +165,7 @@ void world::update()
 
 	driver->beginScene(true, true, video::SColor(255, 0, 0, 255));
 	scenemgr->drawAll();
-	guienv->drawAll();
+	//guienv->drawAll();
 	driver->endScene();
 
 
@@ -112,10 +173,12 @@ void world::update()
 
 	if (frameDeltaTime > 0.1)
 		std::cout << frameDeltaTime << std::endl;
+	if ((frameDeltaTime * 1000) < 25)
+		//device->sleep(25 - (frameDeltaTime * 1000));
 
-	dynamicsWorld->stepSimulation(frameDeltaTime / 2, 0, 0.03333333f/16);
-	
+	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 0, 0.03333333f);
 	then = now;
+	*/
 }
 
 void world::framerate()
@@ -128,17 +191,5 @@ void world::framerate()
 		titlebar += fps;
 		device->setWindowCaption(titlebar.c_str());
 	}
-}
-
-
-
-void main_obj::forward()
-{
-	
-}
-
-void main_obj::stop()
-{
-
 }
 

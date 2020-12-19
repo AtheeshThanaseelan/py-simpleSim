@@ -43,14 +43,14 @@ public:
 	IrrlichtDevice* device;
 	IVideoDriver* driver;
 	ISceneManager* scenemgr;
-	IGUIEnvironment* guienv;
-	IGUIEnvironment* env;
+	//IGUIEnvironment* guienv;
+	//IGUIEnvironment* env;
 
 	u32 then;
 	int fps;
 
 	world(key_controller* controller);
-
+	~world();
 	void update();
 
 
@@ -59,9 +59,4 @@ public:
 
 };
 
-class main_obj
-{
-public:
-	virtual void forward();
-	virtual void stop();
-};
+

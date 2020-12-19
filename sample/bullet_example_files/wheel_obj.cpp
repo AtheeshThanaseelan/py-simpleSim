@@ -23,7 +23,7 @@ subject to the following restrictions:
 //MCLPSolver ?
 #define CUBE_HALF_EXTENTS 1
 
-wheel_obj::wheel_obj(world *world)
+wheel_obj::wheel_obj(world *world) :obj_world(world)
 {
 	btTransform tr;
 	tr.setIdentity();
@@ -32,14 +32,13 @@ wheel_obj::wheel_obj(world *world)
 	btCollisionShape* chassisShape = new btBoxShape(btVector3(1.f, 0.5f, 2.f));
 	world->collisionShapes.push_back(chassisShape);
 
-	btCompoundShape* compound = new btCompoundShape();
+	compound = new btCompoundShape();
 	world->collisionShapes.push_back(compound);
 	btTransform localTrans;
 	localTrans.setIdentity();
 	localTrans.setOrigin(btVector3(0, 1, 0));
 
 	compound->addChildShape(localTrans, chassisShape);
-
 	const btScalar FALLHEIGHT = 5;
 	tr.setOrigin(btVector3(0, FALLHEIGHT, 0));
 
@@ -66,14 +65,14 @@ wheel_obj::wheel_obj(world *world)
 		tr.setIdentity();
 		tr.setOrigin(wheelPos[i]);
 
-		btRigidBody* pBodyB = createRigidBody(world, wheelMass, tr, m_wheelShape);
-		pBodyB->setFriction(1000);
+		pBodyB[i] = createRigidBody(world, wheelMass, tr, m_wheelShape);
+		pBodyB[i]->setFriction(1000);
 		//pBodyB->setActivationState(DISABLE_DEACTIVATION);
 		// add some data to build constraint frames
 		btVector3 parentAxis(0.f, 1.f, 0.f);
 		btVector3 childAxis(1.f, 0.f, 0.f);
 		btVector3 anchor = tr.getOrigin();
-		btHinge2Constraint* pHinge2 = new btHinge2Constraint(*pBodyA, *pBodyB, anchor, parentAxis, childAxis);
+		btHinge2Constraint* pHinge2 = new btHinge2Constraint(*pBodyA, *pBodyB[i], anchor, parentAxis, childAxis);
 		pHingeStore[i] = pHinge2;
 
 		// add constraint to world
@@ -95,14 +94,51 @@ wheel_obj::wheel_obj(world *world)
 		pHinge2->setDamping(2, 2.0);
 		pHinge2->setStiffness(2, 40.0);
 
-		pHinge2->setDbgDrawSize(btScalar(5.f));
+		//pHinge2->setDbgDrawSize(btScalar(5.f));
 
 		//saving the visual node to the physics node  
-		
-		pBodyB->setUserPointer(create_node(world, size));
+		pNode[i] = create_node(world, size);
+		pBodyB[i]->setUserPointer(pNode[i]);
 	}
 	//saving the visual node to the physics node  
-	m_carChassis->setUserPointer(create_node(world, size));
+	irr_body = create_node(world, size);
+	m_carChassis->setUserPointer(irr_body);
+}
+
+wheel_obj::~wheel_obj()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		m_carChassis->removeConstraintRef(pHingeStore[i]);
+		obj_world->dynamicsWorld->removeConstraint(pHingeStore[i]);
+		delete pHingeStore[i];
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		if (pBodyB[i] && pBodyB[i]->getMotionState())
+		{
+			delete pBodyB[i]->getMotionState();
+		}
+		obj_world->dynamicsWorld->removeCollisionObject(pBodyB[i]);
+
+		obj_world->dynamicsWorld->removeRigidBody(pBodyB[i]);
+		obj_world->scenemgr->addToDeletionQueue(pNode[i]);
+		delete pBodyB[i];
+	}
+	obj_world->collisionShapes.remove(m_wheelShape);
+	delete m_wheelShape;
+
+	if (m_carChassis && m_carChassis->getMotionState())
+	{
+		delete m_carChassis->getMotionState();
+	}
+	obj_world->dynamicsWorld->removeCollisionObject(m_carChassis);
+	btCollisionShape* shape = m_carChassis->getCollisionShape();
+	obj_world->collisionShapes.remove(shape);
+	obj_world->dynamicsWorld->removeRigidBody(m_carChassis);
+	delete m_carChassis;
+	obj_world->scenemgr->addToDeletionQueue(irr_body);
+
 }
 
 void wheel_obj::forward()
@@ -110,7 +146,6 @@ void wheel_obj::forward()
 		for (int i = 0; i < 4; i++)
 		{
 			pHingeStore[i]->setTargetVelocity(3, 100);
-			std::cout << std::endl;
 		}
 }
 

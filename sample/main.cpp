@@ -33,130 +33,202 @@ wheel obj
 
 
 void test1() {
-	key_controller controller;
-	world newWorld{ &controller };
-	new terrain_obj(&newWorld);
+	key_controller* controller = new key_controller{};
+	world* main_world = new world{ controller };
+	new terrain_obj(main_world);
 
-	while (newWorld.device->run() && newWorld.driver)
+	while (main_world->device->run() && main_world->driver)
 	{
-		newWorld.update();
+		main_world->update();
 
-		newWorld.framerate();
+		main_world->framerate();
 
-		if (controller.IsKeyDown(KEY_KEY_S))
+		if (controller->IsKeyDown(KEY_KEY_S))
 		{
-			int size[3] = { 10, 10,50 };
-			int pos[3] = { 10,10,10 };
-			int mass = 0;
-			new box_obj(&newWorld, size, pos, mass);
-			controller.clear(KEY_KEY_S);
+			new box_obj{ main_world,new int[] {10,10,10},new int[] {1,1,10},1 };
+			controller->clear(KEY_KEY_S);
+		}
+		if (controller->IsKeyDown(KEY_ESCAPE))
+		{
+			break;
 		}
 
 	}
+	delete main_world;
+	delete controller;
+	
 }
 
 void test2() {
 
-	key_controller controller;
-	world newWorld{ &controller };
-	main_obj* hg = new wheel_obj{ &newWorld };
-	main_obj* bg = nullptr;
-	new terrain_obj(&newWorld);
-
-	int size[3] = { 10, 10,10 };
-	int pos[3] = { 10,10,10 };
-	int mass = 3;
-	hg = new box_obj(&newWorld, size, pos, mass);
-
+	key_controller* controller = new key_controller{};
+	world* main_world = new world{ controller };
+	main_obj* hg = new wheel_obj{ main_world };
+	main_obj* bg = new box_obj{ main_world,new int[] {1,1,1},new int[] {1,1,1},1 };
+	terrain_obj* terr = new terrain_obj{ main_world }; 
 	main_obj* current = nullptr;
-	while (newWorld.device->run() && newWorld.driver)
+
+	while (main_world->device->run() && main_world->driver)
 	{
-		newWorld.update();
-		newWorld.framerate();
-		if (controller.IsKeyDown(KEY_KEY_Q))
+		main_world->update();
+		main_world->framerate();
+		if (controller->IsKeyDown(KEY_KEY_Q))
 		{
 			//ICameraSceneNode* cameraNode{bg.irr_body,};
 			//cameraNode->setPosition(vector3df(0, 10, -70));
 			current = bg;
-			controller.clear(KEY_KEY_Q);
+			controller->clear(KEY_KEY_Q);
 		}
-		if (controller.IsKeyDown(KEY_KEY_E))
+		if (controller->IsKeyDown(KEY_KEY_E))
 		{
 			current = hg;
-			controller.clear(KEY_KEY_E);
+			controller->clear(KEY_KEY_E);
 		}
-		if (controller.IsKeyDown(KEY_KEY_S))
+		if (controller->IsKeyDown(KEY_KEY_S))
 		{
-			controller.clear(KEY_KEY_S);
+			controller->clear(KEY_KEY_S);
 		}
-		if (controller.IsKeyDown(KEY_KEY_W))
+		if (controller->IsKeyDown(KEY_KEY_W))
 		{
 			if (current != nullptr)
 				current->forward();
 			
 		}
-		if (current != nullptr && !controller.IsKeyDown(KEY_KEY_W))
+		if (current != nullptr && !controller->IsKeyDown(KEY_KEY_W))
 		{
 			current->stop();
-			controller.clear(KEY_KEY_W);
+			controller->clear(KEY_KEY_W);
 		}
 	}
+	delete terr;
+	delete current;
+	delete hg;
+	delete bg;
+	delete main_world;
+	delete controller;
 }
 
 void test3() 
 {
-	key_controller controller;
-	world main_world{ &controller };
-	//new terrain_obj(&main_world);
+	key_controller* controller = new key_controller{};
+	world* main_world = new world{ controller };
+	terrain_obj* terr = new terrain_obj{main_world};
 
-	int size[3] = { 10, 10,10 };
-	int pos[3] = { 10,10,10 };
-	int mass = 30;
-	box_obj *obj = new box_obj(&main_world, size, pos, mass);
+	box_obj *obj =  new box_obj{ main_world,new int[] {1,1,1},new int[] {1,1,1},1 };
 
+	
 	ICameraSceneNode* cameraNode;
-	cameraNode = main_world.scenemgr->addCameraSceneNode(obj->irr_body, vector3df(0, 10, 5));
+	cameraNode = main_world->scenemgr->addCameraSceneNode(obj->irr_body, vector3df(0, 10, 5));
 	cameraNode->setFOV(0.78f);
 	//cameraNode->setPosition(vector3df(0, 0, 10));
-	while (main_world.device->run() && main_world.driver)
+	
+	while (main_world->device->run() && main_world->driver)
 	{
-		main_world.update();
 		obj->irr_body->updateAbsolutePosition();
 		cameraNode->setTarget(obj->irr_body->getAbsolutePosition());
-		main_world.framerate();
 
-		if (controller.IsKeyDown(KEY_KEY_W))
+		main_world->update();
+		main_world->framerate();
+
+		if (controller->IsKeyDown(KEY_KEY_W))
 		{
 			obj->forward();
-			controller.clear(KEY_KEY_W);
+			controller->clear(KEY_KEY_W);
 		}
-		if (controller.IsKeyDown(KEY_KEY_S))
+		if (controller->IsKeyDown(KEY_KEY_S))
 		{
 			obj->stop();
-			controller.clear(KEY_KEY_S);
+			controller->clear(KEY_KEY_S);
 		}
 	}
+	delete main_world;
+	delete controller;
+	
+}
+
+void test4()
+{
+	key_controller* controller = new key_controller{};
+	world *main_world = new world{ controller };
+
+	box_obj* box = nullptr;
+	terrain_obj* terr = nullptr;
+	main_obj* main = nullptr;
+
+	ICameraSceneNode* cameraNode = main_world->scenemgr->addCameraSceneNode();
+
+	while (main_world->device->run() && main_world->driver)
+	{
+		main_world->update();
+		main_world->device->run(); 
+		main_world->framerate();
+		/*
+		if (controller->IsKeyDown(KEY_KEY_W))
+		{
+			box = new box_obj{ main_world,new int[] {1,1,1},new int[] {1,1,1},1 };
+			controller->clear(KEY_KEY_W);
+		}
+
+		if (controller->IsKeyDown(KEY_KEY_S))
+		{
+			if(box != nullptr)
+				delete box;
+			controller->clear(KEY_KEY_S);
+		}
+			
+		if (controller->IsKeyDown(KEY_KEY_A))
+		{
+			terr = new terrain_obj{main_world};
+			controller->clear(KEY_KEY_A);
+		}
+
+		if (controller->IsKeyDown(KEY_KEY_D))
+		{
+			if (terr != nullptr)
+				delete terr;
+			terr = nullptr;
+			controller->clear(KEY_KEY_D);
+		}
+		*/
+		if (controller->IsKeyDown(KEY_KEY_Q))
+		{
+			main = new wheel_obj{ main_world };
+			controller->clear(KEY_KEY_Q);
+		}
+
+		if (controller->IsKeyDown(KEY_KEY_E))
+		{
+			if (main != nullptr)
+				delete main;
+			main = nullptr;
+			controller->clear(KEY_KEY_E);
+		}
+	}
+	delete main_world;
+	delete controller; 
 }
 
 int main()
 {
 	int choice;
 	do {
-	printf("Choose test, 0 to exit: ");
-	std::cin >> choice;
-	choice == 3;
-	switch (choice)
-	{
-		case 1:
-			test1();
-			break;
-		case 2:
-			test2();
-			break;
-		case 3:
-			test3();
-			break;
-	}
+		printf("Choose test, 0 to exit: ");
+		std::cin >> choice;
+		switch (choice)
+		{
+			case 1:
+				test1();
+				break;
+			case 2:
+				test2();
+				break;
+			case 3:
+				test3();
+				break;
+			case 4:
+				test4();
+				break;
+		}
 	} while (choice != 0);
 
 	return 0;

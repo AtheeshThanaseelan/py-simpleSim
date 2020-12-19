@@ -26,20 +26,19 @@ public:
 	float wheelWidth = 0.4f;
 
 	btRigidBody* m_carChassis;
+	ISceneNode* irr_body;
 
-	int m_wheelInstances[4];
+	btCompoundShape* compound;
 
-	class btTriangleIndexVertexArray* m_indexVertexArrays;
-
-	btVector3* m_vertices;
+	world* obj_world;
 
 	btCollisionShape* m_wheelShape;
+	btHinge2Constraint* pHingeStore[4];
+	btRigidBody* pBodyB[4];
+	ISceneNode* pNode[4];
 
 	wheel_obj(world* world);
-
+	~wheel_obj();
 	void forward();
-
 	void stop();
-
-	btHinge2Constraint* pHingeStore[4];
 };
