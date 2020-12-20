@@ -1,6 +1,9 @@
 #include "base_utils.h"
 #include "simple_objects.h"
 #include "bullet_example_files/wheel_obj.h"
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
 
 /*
 Logic Controller:
@@ -232,4 +235,16 @@ int main()
 	} while (choice != 0);
 
 	return 0;
+}
+
+PYBIND11_MODULE(sample, m) {
+	m.def("test1", &test1, R"pbdoc(
+        Launch the python test
+    )pbdoc");
+
+#ifdef VERSION_INFO
+	m.attr("__version__") = VERSION_INFO;
+#else
+	m.attr("__version__") = "dev";
+#endif
 }
