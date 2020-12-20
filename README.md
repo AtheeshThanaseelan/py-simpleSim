@@ -1,4 +1,7 @@
 # C++ Physics Environment
-# Python Library Branch
+Can be ran as a standalone C++ executable, or linked with python (with "library_version" branch).
 
-Uses pybind11 to export a module for python to import and use as a physics environment.
+Requires Irrlicht and Bullet3 libraries
+
+Current built with Visual studio, but will eventually be turned into makefiles
+
