@@ -1,13 +1,4 @@
 # c++ physics project
+# Python Library Branch
 
-Done:
-- Initilization
-- Object Creation
-- Bullet Physics Compound objects
-- Switching between objects to control
-
-Todo:
-- Managing objects  
-  - Select different types of objects to control
-  - Move objects along predetermined path
-
+Uses pybind11 to export a module for python to import and use as a simulation environment.
