@@ -1,13 +1,5 @@
-# c++ physics project
+# C++ Physics Environment
 
-Done:
-- Initilization
-- Object Creation
-- Bullet Physics Compound objects
-- Switching between objects to control
+Can be ran as a standalone C++ executable, or linked with python (with "library_version" branch).
 
-Todo:
-- Managing objects  
-  - Select different types of objects to control
-  - Move objects along predetermined path
-
+Requires Irrlicht and Bullet3 libraries
