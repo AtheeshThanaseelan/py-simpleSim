@@ -211,14 +211,16 @@ void test4()
 	delete controller; 
 }
 
-int main()
-{
-	int choice;
-	do {
-		printf("Choose test, 0 to exit: ");
-		std::cin >> choice;
-		switch (choice)
-		{
+
+#if defined _DEBUG
+	int main()
+	{
+		int choice;
+		do {
+			printf("Choose test, 0 to exit: ");
+			std::cin >> choice;
+			switch (choice)
+			{
 			case 1:
 				test1();
 				break;
@@ -231,20 +233,24 @@ int main()
 			case 4:
 				test4();
 				break;
-		}
-	} while (choice != 0);
+			}
+		} while (choice != 0);
 
-	return 0;
-}
+		return 0;
+	}
 
-PYBIND11_MODULE(sample, m) {
-	m.def("test1", &test1, R"pbdoc(
-        Launch the python test
-    )pbdoc");
 
-#ifdef VERSION_INFO
-	m.attr("__version__") = VERSION_INFO;
 #else
-	m.attr("__version__") = "dev";
+	PYBIND11_MODULE(sample, m) {
+		m.def("test1", &test1, R"pbdoc(
+			Launch the python test
+		)pbdoc");
+
+	#ifdef VERSION_INFO
+		m.attr("__version__") = VERSION_INFO;
+	#else
+		m.attr("__version__") = "dev";
+	#endif
+	}
+
 #endif
-}
