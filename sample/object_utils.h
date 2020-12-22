@@ -10,6 +10,9 @@ Keep Library specific functions seperate
 //Return scene node
 IMeshSceneNode* create_node(world* world, int size[3]);
 
+//Load OBJ file
+ISceneNode* load_obj(world* world,std::string file = "../textures/city/city.dae");
+
 //Return btRigidBody
 btRigidBody* createRigidBody(world* world, float mass, const btTransform& startTransform, btCollisionShape* shape);
 

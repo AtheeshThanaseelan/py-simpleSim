@@ -167,7 +167,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Documents\C\Libraries\vcpkg\installed\x64-windows\include\bullet\LinearMath;C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,7 +181,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Documents\C\Libraries\vcpkg\installed\x64-windows\include\bullet\LinearMath;C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -197,7 +197,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Documents\C\Libraries\vcpkg\installed\x64-windows\include\bullet\LinearMath;C:\Users\tourist\anaconda3\envs\cpp_env\include;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,14 +209,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bullet_example_files\wheel_obj.cpp" />
+    <ClCompile Include="compound_obj.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object_utils.cpp" />
     <ClCompile Include="simple_objects.cpp" />
     <ClCompile Include="base_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BulletFileLoader\btBulletFile.h" />
     <ClInclude Include="base_utils.h" />
     <ClInclude Include="bullet_example_files\wheel_obj.h" />
+    <ClInclude Include="compound_obj.h" />
     <ClInclude Include="object_utils.h" />
     <ClInclude Include="simple_objects.h" />
   </ItemGroup>

@@ -13,6 +13,18 @@ IMeshSceneNode* create_node(world* world, int size[3])
 	return cubeNode;
 }
 
+ISceneNode* load_obj(world* world, std::string file)
+{
+	std::string* fileptr = &file;
+	irr:io:path path = fileptr->c_str();
+	IAnimatedMesh* obj = world->scenemgr->getMesh(path);
+	IAnimatedMeshSceneNode* obj_node = world->scenemgr->addAnimatedMeshSceneNode(obj);
+	obj_node->setMaterialFlag(video::EMF_LIGHTING, false);
+	obj_node->setPosition(vector3df(0, 0, 0));
+	obj_node->setRotation(vector3df(0, 90, 90));
+	return obj_node;
+}
+
 btRigidBody* createRigidBody(world* world, float mass, const btTransform& startTransform, btCollisionShape* shape)
 {
 	btAssert((!shape || shape->getShapeType() != INVALID_SHAPE_PROXYTYPE));

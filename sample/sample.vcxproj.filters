@@ -30,6 +30,9 @@
     <ClCompile Include="bullet_example_files\wheel_obj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="compound_obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple_objects.h">
@@ -42,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bullet_example_files\wheel_obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BulletFileLoader\btBulletFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compound_obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
