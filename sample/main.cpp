@@ -1,12 +1,20 @@
 #include "base_utils.h"
 #include "simple_objects.h"
-#include "bullet_example_files/wheel_obj.h"
 #include "compound_obj.h"
+#include "complex_obj.h"
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
+static key_controller* controller = new key_controller{};
+
 /*
+Python Object Controller:
+Interface for python to direct and obtain statistics on objects in the world (create object, find position)
+
+Python World Controller:
+Interface for python to direct and obtain statistics on objects on the world (create wind, determine "weather")
+
 Logic Controller:
 Controls all objects > has them in objects
 Move objects
@@ -21,46 +29,35 @@ Object defines function of each key
 base
 	key controller
 	world
-	main_obj
 
 object utils
 	bt rigid body
 	cube node
+	main_obj
 
 simple obj
 	box obj
 	terrain obj
 
-wheel obj
+compound obj
 	only it
 */
 
-void incr(key_controller* controller,EKEY_CODE button,float* var,float mult=10,float lim=0.5)
+class pyWorld
 {
-
-	if((*var*(mult /abs(mult)))<lim)
-		*var += 0.01f*mult;
-	controller->clear(button);
-}
-
-btVector3 relativeForce(float force, btRigidBody* body)
-{
-	btVector3 f(0, 0, force);
-	btTransform boxTrans;
-	boxTrans.setIdentity();
-	body->getMotionState()->getWorldTransform(boxTrans);
-	btVector3 correctedForce = (boxTrans * f) - boxTrans.getOrigin();
-	return correctedForce;
-}
-
-btVector3 relativePos(btVector3 pos, btRigidBody* body)
-{
-	btTransform boxTrans;
-	boxTrans.setIdentity();
-	body->getMotionState()->getWorldTransform(boxTrans);
-	btVector3 relativePos = pos - boxTrans.getOrigin();
-	return relativePos;
-}
+public:
+	pyWorld() : main(new world{ controller })
+	{ 
+		
+	}
+	void update()
+	{
+		main->device->run();
+		main->update();
+	}
+private:
+	world* main;
+};
 
 //Box and Terrain Test
 void test1() {
@@ -206,7 +203,7 @@ void test4()
 		*/
 		if (controller->IsKeyDown(KEY_KEY_Q))
 		{
-			main = new wheel_obj{ main_world };
+			main = new compound_obj{ main_world };
 			controller->clear(KEY_KEY_Q);
 		}
 
@@ -252,74 +249,44 @@ void test6()
 
 	key_controller* controller = new key_controller{};
 	world* main_world = new world{ controller };
-	box_obj* heli = new box_obj{ main_world,new int[] {3,3,3},new int[] {0,0,10},1 };
 	new terrain_obj(main_world);
 
-	float pow = 1;
-	float roll = 0;
-	float pitch = 0;
-	float yaw = 0;
+	complex_obj* heli = new complex_obj(main_world);
+
+	ICameraSceneNode* cameraNode;
+	cameraNode = main_world->scenemgr->addCameraSceneNode(heli->frame->irr_body, vector3df(-10, 0, 5));
+	cameraNode->setFOV(0.78f);
 	while (main_world->device->run() && main_world->driver)
 	{
+		cameraNode->setTarget(heli->frame->irr_body->getAbsolutePosition());
 		main_world->update();
 		main_world->framerate();
-		/*
+		heli->update_logic();
+		if (controller->IsKeyDown(KEY_KEY_P))
 		{
-			if (controller->IsKeyDown(KEY_KEY_P))
-				incr(controller, KEY_KEY_P, &pow, 100.f,11.f);
-			if (controller->IsKeyDown(KEY_KEY_L))
-				incr(controller, KEY_KEY_L, &pow, -100.f,0);
-			
-			if (controller->IsKeyDown(KEY_KEY_W))
-				incr(controller, KEY_KEY_W, &pitch);
-			if (controller->IsKeyDown(KEY_KEY_S))
-				incr(controller, KEY_KEY_S, &pitch, -10,0.5f);
+			heli->direct(complex_obj::direction::up);
+		}
+		if (controller->IsKeyDown(KEY_KEY_L))
+		{
+			heli->direct(complex_obj::direction::down);
+		}
+		if (controller->IsKeyDown(KEY_KEY_W))
+		{
+			heli->direct(complex_obj::direction::front);
+		}
+		if (controller->IsKeyDown(KEY_KEY_S))
+		{
+			heli->direct(complex_obj::direction::back);
+		}
+		if (controller->IsKeyDown(KEY_KEY_A))
+		{
+			heli->direct(complex_obj::direction::left);
+		}
+		if (controller->IsKeyDown(KEY_KEY_D))
+		{
+			heli->direct(complex_obj::direction::right);
+		}
 
-			if (controller->IsKeyDown(KEY_KEY_A))
-				incr(controller, KEY_KEY_A, &roll);
-			if (controller->IsKeyDown(KEY_KEY_D))
-				incr(controller, KEY_KEY_D, &roll, -10, 0.5f);
-
-			if (controller->IsKeyDown(KEY_KEY_Q))
-				incr(controller, KEY_KEY_Q, &yaw);
-			if (controller->IsKeyDown(KEY_KEY_E))
-				incr(controller, KEY_KEY_E, &yaw, -10, 0.5f);
-			
-		}
-		*/
-		heli->body->setGravity(btVector3(0,0,0));
-		heli->body->setActivationState(DISABLE_DEACTIVATION);
-		
-		//Upwards Thrust
-		{
-			//heli->body->setAngularVelocity(btVector3(0, 0, 1));
-			//heli->body->applyCentralForce(relativeForce(10,heli->body));
-			heli->body->applyForce(relativeForce(10,heli->body),btVector3(0,0,0));
-		}
-		/*
-		//Roll
-		{
-			btVector3 f = relativeForce(roll, heli->body);
-			btVector3 rotor(0, 7, 4);
-			btVector3 rotor2(0, 7, -4);
-			heli->body->applyForce(f, rotor);
-			heli->body->applyForce(-f, rotor2);
-		}
-		//Yaw
-		{
-			btVector3 f = relativeForce(yaw, heli->body);
-			btVector3 rotor(-8, 0, 0);
-			heli->body->applyForce(f, rotor);
-		}
-		//Pitch
-		{
-			btVector3 f = relativeForce(pitch, heli->body);
-			btVector3 rotor(-7, 7, 0);
-			btVector3 rotor2(7, 7, 0);
-			heli->body->applyForce(f, rotor);
-			heli->body->applyForce(-f, rotor2);
-		}
-		*/
 	}
 	delete main_world;
 	delete controller;
@@ -363,16 +330,19 @@ void test6()
 
 
 #else
-	PYBIND11_MODULE(sample, m) {
-		m.def("test1", &test1, R"pbdoc(
-			Launch the python test
-		)pbdoc");
-
-	#ifdef VERSION_INFO
-		m.attr("__version__") = VERSION_INFO;
-	#else
-		m.attr("__version__") = "dev";
-	#endif
+	PYBIND11_MODULE(sample, m) 
+	{
+		m.def("test1", &test1, R"pbdoc(Launch the python test)pbdoc");
+		py::class_<pyWorld>(m, "pyWorld")
+			.def(py::init<>())
+			.def("update", &pyWorld::update);
+			//.def("setName", &worldParam::setName)
+			//.def("getName", &worldParam::getName);
+		#ifdef VERSION_INFO
+			m.attr("__version__") = VERSION_INFO;
+		#else
+			m.attr("__version__") = "dev";
+		#endif
 	}
 
 #endif
