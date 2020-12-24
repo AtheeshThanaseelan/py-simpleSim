@@ -19,17 +19,22 @@ btVector3 relativeForce(btVector3 f, btRigidBody* body)
 
 complex_obj::complex_obj(world* main_world)
 {
-	frame = new box_obj{ main_world,new int[] {3,3,3},new int[] {0,0,10},1 };
+	frame = new box_obj{ main_world,new int[] {3,3,3},new int[] {0,0,0},1 };
+	frame->body->setAngularFactor(btScalar(0));
+}
+
+complex_obj::complex_obj(pyWorld* py_world)
+{
+	frame = new box_obj{ py_world->main,new int[] {3,3,3},new int[] {0,0,0},1 };
 	frame->body->setAngularFactor(btScalar(0));
 }
 
 void complex_obj::update_logic()
 {
 	frame->body->setActivationState(DISABLE_DEACTIVATION);
-	std::cout << pow << std::endl;
-	std::cout << roll << std::endl;
-	std::cout << pitch << std::endl;
-	system("cls");
+	
+
+	
 	//Upwards Thrust
 	{
 		btVector3 f(0, 0, pow);
@@ -47,6 +52,15 @@ void complex_obj::update_logic()
 	}
 }
 
+std::string complex_obj::getProperties()
+{
+	std::cout << pow << std::endl;
+	std::cout << roll << std::endl;
+	std::cout << pitch << std::endl;
+	system("cls");
+	return "";
+}
+
 void complex_obj::direct(direction dir)
 {
 	switch (dir)
@@ -59,4 +73,9 @@ void complex_obj::direct(direction dir)
 		case right: incr(&roll, 100.f, 11.f); break;
 
 	}
+}
+
+complex_obj::~complex_obj()
+{
+	delete frame;
 }

@@ -30,6 +30,8 @@ private:
 	bool KeyIsDown[KEY_KEY_CODES_COUNT];
 };
 
+static key_controller* controller = new key_controller{};
+
 class world
 {
 public:
@@ -58,5 +60,6 @@ public:
 
 
 };
+
 
 

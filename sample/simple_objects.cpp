@@ -11,10 +11,8 @@ box_obj::box_obj(world* world,int size[3], int pos[3], int mass_param) :obj_worl
 
 	btScalar mass(mass_param *1.f);
 
+	startTransform.setIdentity();
 	startTransform.setOrigin(btVector3(pos[0], pos[1],pos[2]));
-	//btQuaternion quat(btVector3(0.4, .02, .1), 67);
-	btQuaternion quat(btVector3(1, 1, 1), 67); //rotat
-	startTransform.setRotation(quat);
 
 	body = createRigidBody(world, mass, startTransform, colShape);
 
@@ -56,8 +54,6 @@ void box_obj::stop()
 		body->applyCentralImpulse(f);
 }
 
-
-
 terrain_obj::terrain_obj(world* world) :obj_world(world)
 {
 	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(1000.), btScalar(1.), btScalar(1000.)));
@@ -66,7 +62,7 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0, -1, 0));
+	groundTransform.setOrigin(btVector3(0, 0, 0));
 
 
 	btScalar mass(0.);
@@ -78,8 +74,8 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 
 	IAnimatedMesh* hillPlaneMesh = obj_world->scenemgr->addHillPlaneMesh("base",
 		core::dimension2d<f32>(10, 10),
-		core::dimension2d<u32>(100, 100), 0, 1,
-		core::dimension2d<f32>(2, 2),
+		core::dimension2d<u32>(100, 100), 0, 0,
+		core::dimension2d<f32>(0, 0),
 		core::dimension2d<f32>(100, 100));
 
 	irr_planeNode = obj_world->scenemgr->addAnimatedMeshSceneNode(hillPlaneMesh);

@@ -6,9 +6,8 @@
 
 namespace py = pybind11;
 
-static key_controller* controller = new key_controller{};
+/*Controllers
 
-/*
 Python Object Controller:
 Interface for python to direct and obtain statistics on objects in the world (create object, find position)
 
@@ -20,44 +19,18 @@ Controls all objects > has them in objects
 Move objects
 Calculate any logic for world
 
-Player controller:
-Any controllable object extends
-Object defines function of each key
 */
 
-/*
-base
-	key controller
-	world
-
-object utils
-	bt rigid body
-	cube node
-	main_obj
-
-simple obj
-	box obj
-	terrain obj
-
-compound obj
-	only it
+/* Classes
+* World Object
+* Static Controller Object
+* 
+* Simple Objects
+* Compound Object
+* Complex(logic) Object
+* Camera Object
 */
 
-class pyWorld
-{
-public:
-	pyWorld() : main(new world{ controller })
-	{ 
-		
-	}
-	void update()
-	{
-		main->device->run();
-		main->update();
-	}
-private:
-	world* main;
-};
 
 //Box and Terrain Test
 void test1() {
@@ -128,7 +101,7 @@ void test3()
 
 	
 	ICameraSceneNode* cameraNode;
-	cameraNode = main_world->scenemgr->addCameraSceneNode(obj->irr_body, vector3df(0, 10, 5));
+	cameraNode = main_world->scenemgr->addCameraSceneNode(obj->irr_body, vector3df(0, 5, 10));
 	cameraNode->setFOV(0.78f);
 	//cameraNode->setPosition(vector3df(0, 0, 10));
 	
@@ -254,8 +227,12 @@ void test6()
 	complex_obj* heli = new complex_obj(main_world);
 
 	ICameraSceneNode* cameraNode;
-	cameraNode = main_world->scenemgr->addCameraSceneNode(heli->frame->irr_body, vector3df(-10, 0, 5));
+
+	cameraNode = main_world->scenemgr->addCameraSceneNode();
+	heli->frame->irr_body->addChild(cameraNode);
 	cameraNode->setFOV(0.78f);
+	cameraNode->setPosition(vector3df(10, 5, 0));
+
 	while (main_world->device->run() && main_world->driver)
 	{
 		cameraNode->setTarget(heli->frame->irr_body->getAbsolutePosition());
@@ -286,10 +263,28 @@ void test6()
 		{
 			heli->direct(complex_obj::direction::right);
 		}
+		if (controller->IsKeyDown(KEY_KEY_I))
+		{
+			system("dir");
+			std::cout<< heli->frame->body->getWorldTransform().getRotation().getW() << std::endl;
+			std::cout<< heli->frame->body->getWorldTransform().getRotation().getX() << std::endl;
+			std::cout<< heli->frame->body->getWorldTransform().getRotation().getY() << std::endl;
+			std::cout<< heli->frame->body->getWorldTransform().getRotation().getZ() << std::endl;
+			std::cout << heli->frame->body->getWorldTransform().getOrigin().getX() << std::endl;
+			std::cout << heli->frame->body->getWorldTransform().getOrigin().getY() << std::endl;
+			std::cout << heli->frame->body->getWorldTransform().getOrigin().getZ() << std::endl;
+			heli->getProperties();
+		}
 
 	}
 	delete main_world;
 	delete controller;
+}
+
+//Visualization tools
+void test7()
+{
+
 }
 
 //Python Paramter Import Test
@@ -332,12 +327,18 @@ void test6()
 #else
 	PYBIND11_MODULE(sample, m) 
 	{
-		m.def("test1", &test1, R"pbdoc(Launch the python test)pbdoc");
+		// Same binding code
+		py::class_<py_obj>(m, "py_obj");
+		py::class_<complex_obj, py_obj>(m, "complex_obj")
+			.def(py::init<pyWorld*>())
+			.def("update_logic", &complex_obj::update_logic, R"pbdoc(Update the helicopter logic)pbdoc")
+			.def("getProperties", &complex_obj::getProperties, R"pbdoc(Get the helicopter properties)pbdoc");
+			//.def("remove_heli", &complex_obj::~complex_obj)
+		// Again, return a base pointer to a derived instance
+		m.def("create_heli", [](pyWorld* arg) { return std::unique_ptr<py_obj>(new complex_obj(arg)); });
 		py::class_<pyWorld>(m, "pyWorld")
 			.def(py::init<>())
 			.def("update", &pyWorld::update);
-			//.def("setName", &worldParam::setName)
-			//.def("getName", &worldParam::getName);
 		#ifdef VERSION_INFO
 			m.attr("__version__") = VERSION_INFO;
 		#else
