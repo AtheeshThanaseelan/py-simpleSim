@@ -45,8 +45,6 @@ public:
 	IrrlichtDevice* device;
 	IVideoDriver* driver;
 	ISceneManager* scenemgr;
-	//IGUIEnvironment* guienv;
-	//IGUIEnvironment* env;
 
 	u32 then;
 	int fps;
@@ -59,6 +57,34 @@ public:
 	void framerate();
 
 
+};
+
+class camera 
+{
+public:
+	camera(world* main_world);
+	camera(world* main_world, IMeshSceneNode* body);
+	void update();
+
+	ICameraSceneNode* cameraNode;
+	IMeshSceneNode* body = nullptr;
+	world* main_world;
+};
+
+class pyWorld
+{
+public:
+	world* main;
+	pyWorld() : main(new world{ controller })
+	{
+		//new terrain_obj(main);
+	}
+	void update()
+	{
+		main->device->run();
+		main->update();
+	}
+private:
 };
 
 

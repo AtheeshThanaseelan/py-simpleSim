@@ -10,7 +10,6 @@ bool key_controller::OnEvent(const SEvent& event)
 	return false;
 }
 
-// This is used to check whether a key is being held down
 bool key_controller::IsKeyDown(EKEY_CODE keyCode) const
 {
 	return KeyIsDown[keyCode];
@@ -26,6 +25,8 @@ key_controller::key_controller()
 	for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
 		KeyIsDown[i] = false;
 }
+
+
 
 //World
 world::world(key_controller* controller) 
@@ -193,3 +194,24 @@ void world::framerate()
 	}
 }
 
+
+//Camera
+camera::camera(world* main_world):main_world{main_world}
+{
+
+	cameraNode = main_world->scenemgr->addCameraSceneNodeFPS();
+
+}
+
+camera::camera(world* main_world, IMeshSceneNode* body) : body{ body }, main_world{ main_world }
+{
+	cameraNode = main_world->scenemgr->addCameraSceneNode();
+	body->addChild(cameraNode);
+	cameraNode->setFOV(0.78f);
+	cameraNode->setPosition(vector3df(10, 5, 0));
+}
+
+void camera::update()
+{
+	cameraNode->setTarget(body->getAbsolutePosition());
+}

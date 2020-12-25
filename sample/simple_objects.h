@@ -1,7 +1,7 @@
 #pragma once
 #include "base_utils.h"
 #include "object_utils.h"
-class box_obj : public main_obj
+class box_obj //: public py_obj
 {
 public:
 	world* obj_world;

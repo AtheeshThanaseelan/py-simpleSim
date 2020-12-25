@@ -1,7 +1,5 @@
 #include "object_utils.h"
 
-
-
 IMeshSceneNode* create_node(world* world, int size[3])
 {
 	std::cout << size[0];

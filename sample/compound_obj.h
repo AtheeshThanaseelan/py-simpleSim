@@ -1,7 +1,7 @@
 #pragma once
 #include "base_utils.h"
 #include "object_utils.h"
-class compound_obj : public main_obj
+class compound_obj : public py_obj
 {
 public:
 	//Properties
