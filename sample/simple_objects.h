@@ -8,7 +8,7 @@ public:
 	btRigidBody* body;
 	IMeshSceneNode* irr_body;
 
-	box_obj(world* world, int size[3], int pos[3], int mass_param);
+	box_obj(world* world, float size[3], int pos[3], int mass_param);
 	~box_obj();
 	void forward();
 	void stop();

@@ -9,13 +9,13 @@ public:
 
 	complex_obj(world* main_world);
 	complex_obj(pyWorld* py_world);
-	void direct(direction dir);
 	void update_logic();
-	//void py_setTransform() = 0;
-	float* getTransform_qat();
-	std::string getProperties();
-	//void setProperties() = 0;
 	~complex_obj();
+
+	void direct(direction dir);
+	std::array<float, 7> getTransform_qat();
+	void setTransform_qat(std::array<float, 7> ok);
+	std::string getProperties();
 
 	float pow = 0;
 	float roll = 0;

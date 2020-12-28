@@ -52,7 +52,7 @@ world::world(key_controller* controller)
 	///-----initialization_end-----
 
 	device = createDevice(video::EDT_OPENGL,
-		dimension2d<u32>(800, 600), 32, false, false, false, controller);
+		dimension2d<u32>(800, 600), 32, false, false, true, controller);
 	driver = device->getVideoDriver();
 	scenemgr = device->getSceneManager();
 	//guienv = device->getGUIEnvironment();
@@ -63,7 +63,7 @@ world::world(key_controller* controller)
 	cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
 	cameraNode->setPosition(vector3df(0, 10, -70));
 
-	then = device->getTimer()->getTime();
+	//then = device->getTimer()->getTime();
 	fps = driver->getFPS();
 }
 
@@ -122,64 +122,12 @@ void world::update()
 		}
 	}
 
-	const u32 now = device->getTimer()->getTime();
-
-	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
-
-	driver->beginScene(true, true, video::SColor(255, 0, 0, 255));
+	driver->beginScene(true, true, video::SColor(180,0, 0, 255));
 	scenemgr->drawAll();
-	//guienv->drawAll();
 	driver->endScene();
 
-	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 10);
-
-	//if ((frameDeltaTime * 1000) < 25)
-	//	device->sleep(25 - (frameDeltaTime * 1000));
-
-	then = now;
-	/*
-	const u32 now = device->getTimer()->getTime();
-
-	int numOfObjects = dynamicsWorld->getNumCollisionObjects();
-	for (int j = numOfObjects - 1; j >= 0; j--)
-	{
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		btTransform trans;
-
-		body->getMotionState()->getWorldTransform(trans);
-		ISceneNode* cube = reinterpret_cast<ISceneNode*>(body->getUserPointer());
-		if (cube != NULL) {//update cubes only
-			btVector3 origin = trans.getOrigin();
-			//update rotation
-			btQuaternion rot = trans.getRotation();
-			quaternion q(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
-			vector3df Euler;
-			q.toEuler(Euler);
-			Euler *= RADTODEG;
-
-			cube->setPosition(vector3df(origin.getX(), origin.getY(), origin.getZ()));
-			cube->setRotation(Euler);
-			cube->setVisible(true);
-		}
-	}
-
-	driver->beginScene(true, true, video::SColor(255, 0, 0, 255));
-	scenemgr->drawAll();
-	//guienv->drawAll();
-	driver->endScene();
-
-
-	const f32 frameDeltaTime = (f32)(now - then) / 1000.f;
-
-	if (frameDeltaTime > 0.1)
-		std::cout << frameDeltaTime << std::endl;
-	if ((frameDeltaTime * 1000) < 25)
-		//device->sleep(25 - (frameDeltaTime * 1000));
-
-	dynamicsWorld->stepSimulation(frameDeltaTime * 2, 0, 0.03333333f);
-	then = now;
-	*/
+	const f32 frameDeltaTime = (f32)(1.f / 60.f);
+	dynamicsWorld->stepSimulation(frameDeltaTime, 2);
 }
 
 void world::framerate()
@@ -195,6 +143,7 @@ void world::framerate()
 }
 
 
+
 //Camera
 camera::camera(world* main_world):main_world{main_world}
 {
@@ -208,10 +157,35 @@ camera::camera(world* main_world, IMeshSceneNode* body) : body{ body }, main_wor
 	cameraNode = main_world->scenemgr->addCameraSceneNode();
 	body->addChild(cameraNode);
 	cameraNode->setFOV(0.78f);
-	cameraNode->setPosition(vector3df(10, 5, 0));
+	cameraNode->setPosition(vector3df(-10, 5, 0));
 }
 
 void camera::update()
-{
+{	
+	if(body!=nullptr)
 	cameraNode->setTarget(body->getAbsolutePosition());
+}
+
+
+
+//Clock
+world_timer::world_timer(float time) :time{ time }, real_time{time} {}
+
+void world_timer::advance()
+{
+	steps++;
+	if (sub_times >= 3)
+	{
+		sub_times = 1;
+		time += 0.05;
+	}
+	else
+	{
+		sub_times++;
+	}
+	real_time += 1.f / 60.f;
+}
+float world_timer::get_time()
+{
+	return real_time;
 }

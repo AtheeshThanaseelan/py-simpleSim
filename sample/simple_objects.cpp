@@ -1,6 +1,6 @@
 #include "simple_objects.h"
 
-box_obj::box_obj(world* world,int size[3], int pos[3], int mass_param) :obj_world(world)
+box_obj::box_obj(world* world,float size[3], int pos[3], int mass_param) :obj_world(world)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
 	obj_world->collisionShapes.push_back(colShape);
