@@ -1,6 +1,6 @@
 #include "object_utils.h"
 
-IMeshSceneNode* create_node(world* world, float size[3])
+IMeshSceneNode* create_node(world* world, std::array<float, 3> size)
 {
 	IMeshSceneNode* cubeNode = world->scenemgr->addCubeSceneNode(1.0f,0,0,vector3df(0,0,0), vector3df(0, 0, 0), vector3df(size[0]*2, size[1]*2, size[2]*2));
 	cubeNode->setMaterialType(EMT_SOLID);
@@ -52,4 +52,47 @@ btRigidBody* createRigidBody(world* world, float mass, const btTransform& startT
 	body->setUserIndex(-1);
 	world->dynamicsWorld->addRigidBody(body);
 	return body;
+}
+
+
+void py_obj::direct(direction dir)
+{
+	std::cout << "Object is static" << std::endl;
+}
+std::array<float, 7> py_obj::getTransform_qat()
+{
+	std::array<float, 7> transform_qat{};
+	transform_qat[0] = bt_body->getWorldTransform().getRotation().getW();
+	transform_qat[1] = bt_body->getWorldTransform().getRotation().getX();
+	transform_qat[2] = bt_body->getWorldTransform().getRotation().getY();
+	transform_qat[3] = bt_body->getWorldTransform().getRotation().getZ();
+
+	transform_qat[4] = bt_body->getWorldTransform().getOrigin().getX();
+	transform_qat[5] = bt_body->getWorldTransform().getOrigin().getY();
+	transform_qat[6] = bt_body->getWorldTransform().getOrigin().getZ();
+	return transform_qat;
+}
+std::string py_obj::getProperties()
+{
+	std::string empty = "Not Complex";
+	return empty;
+}
+void py_obj::setTransform_qat(std::array<float, 7> transform_qat)
+{
+	btQuaternion quat;
+	quat.setW(transform_qat[0]);
+	quat.setX(transform_qat[1]);
+	quat.setY(transform_qat[2]);
+	quat.setZ(transform_qat[3]);
+
+	btVector3 origin;
+	origin.setX(transform_qat[4]);
+	origin.setY(transform_qat[5]);
+	origin.setZ(transform_qat[6]);
+
+	btTransform trans;
+	trans.setRotation(quat);
+	trans.setOrigin(origin);
+
+	bt_body->setWorldTransform(trans);
 }

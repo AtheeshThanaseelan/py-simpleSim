@@ -85,6 +85,10 @@ public:
 		main->device->run();
 		main->update();
 	}
+	~pyWorld()
+	{
+
+	}
 private:
 };
 

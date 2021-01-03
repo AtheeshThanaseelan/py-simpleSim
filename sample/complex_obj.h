@@ -2,9 +2,10 @@
 #include "simple_objects.h"
 #include "base_utils.h"
 
-class complex_obj : public py_obj
+class complex_obj //: public py_obj
 {
 public:
+
 	box_obj* frame;
 
 	complex_obj(world* main_world);

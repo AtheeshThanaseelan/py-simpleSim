@@ -7,8 +7,8 @@ compound_obj::compound_obj(world* world) :obj_world(world)
 	//Setup object properties
 	float wheelRadius = 0.5f;
 	float wheelWidth = 7.f;
-	float size[3] = { wheelRadius,wheelRadius,wheelWidth };
-
+	std::array<float,3> size = { wheelRadius,wheelRadius,wheelWidth };
+	std::array<float, 3> chassis_size = { 10,3,5 };
 	const btScalar FALLHEIGHT = 50;
 	btVector3 positions[2] = {
 		btVector3(btScalar(5), btScalar(FALLHEIGHT - 5), btScalar(0)),
@@ -83,7 +83,7 @@ compound_obj::compound_obj(world* world) :obj_world(world)
 	pHingeStore[1]->enableMotor(5, true);
 
 	//saving the visual node to the physics node  
-	irr_main_body = create_node(world, new float[] {10,3,5});
+	irr_main_body = create_node(world, chassis_size);
 	main_body->setUserPointer(irr_main_body);
 }
 

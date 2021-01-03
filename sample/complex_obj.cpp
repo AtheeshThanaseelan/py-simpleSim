@@ -19,41 +19,47 @@ btVector3 relativeForce(btVector3 f, btRigidBody* body)
 
 complex_obj::complex_obj(world* main_world)
 {
-	frame = new box_obj{ main_world,new float[] {5,1,3},new int[] {0,0,0},1 };
-	frame->body->setFriction(btScalar(10));
+	std::array<float, 3> size = { 5,1,3 };
+	std::array<int, 3> pos = { 0,0,0 };
+	frame = new box_obj{ main_world,size,pos,1 };
+	frame->bt_body->setFriction(btScalar(10));
 	//frame->body->setAngularFactor(btScalar(0));
 }
+
 
 complex_obj::complex_obj(pyWorld* py_world)
 {
 	isPyWorld = true;
-	frame = new box_obj{ py_world->main,new float[] {3,3,3},new int[] {0,0,0},1 };
+	std::array<float, 3> size = { 5,1,3 };
+	std::array<int, 3> pos = { 0,0,0 };
+	frame = new box_obj{ py_world->main,size,pos,1 };
 	//frame->body->setAngularFactor(btScalar(0));
 }
 
+
 void complex_obj::update_logic()
 {
-	frame->body->setActivationState(DISABLE_DEACTIVATION);
+	frame->bt_body->setActivationState(DISABLE_DEACTIVATION);
 	//Upwards Thrust
 	{
 		btVector3 f(0, pow, 0);
-		frame->body->applyCentralForce(relativeForce(f, frame->body));
+		frame->bt_body->applyCentralForce(relativeForce(f, frame->bt_body));
 	}
 	//Roll
 	{
 		btVector3 f(0, 0, roll);
-		frame->body->applyCentralForce(relativeForce(f, frame->body));
+		frame->bt_body->applyCentralForce(relativeForce(f, frame->bt_body));
 	}
 	//Pitch
 	{
 		btVector3 f(pitch, 0, 0);
-		frame->body->applyCentralForce(relativeForce(f, frame->body));
+		frame->bt_body->applyCentralForce(relativeForce(f, frame->bt_body));
 	}
 	//Yaw
 	{
 		btVector3 f(0, yaw, 0);
 		//frame->body->applyCentralForce(relativeForce(f, frame->body));
-		frame->body->applyTorque(f);
+		frame->bt_body->applyTorque(f);
 	}
 }
 
@@ -71,14 +77,14 @@ std::string complex_obj::getProperties()
 std::array<float,7> complex_obj::getTransform_qat()
 {
 	std::array<float, 7> ok{};
-	ok[0] = frame->body->getWorldTransform().getRotation().getW();
-	ok[1] = frame->body->getWorldTransform().getRotation().getX();
-	ok[2] = frame->body->getWorldTransform().getRotation().getY();
-	ok[3] = frame->body->getWorldTransform().getRotation().getZ();
+	ok[0] = frame->bt_body->getWorldTransform().getRotation().getW();
+	ok[1] = frame->bt_body->getWorldTransform().getRotation().getX();
+	ok[2] = frame->bt_body->getWorldTransform().getRotation().getY();
+	ok[3] = frame->bt_body->getWorldTransform().getRotation().getZ();
 
-	ok[4] = frame->body->getWorldTransform().getOrigin().getX();
-	ok[5] = frame->body->getWorldTransform().getOrigin().getY();
-	ok[6] = frame->body->getWorldTransform().getOrigin().getZ();
+	ok[4] = frame->bt_body->getWorldTransform().getOrigin().getX();
+	ok[5] = frame->bt_body->getWorldTransform().getOrigin().getY();
+	ok[6] = frame->bt_body->getWorldTransform().getOrigin().getZ();
 	return ok;
 }
 
@@ -120,7 +126,7 @@ void complex_obj::setTransform_qat(std::array<float, 7> ok)
 	trans.setRotation(quat);
 	trans.setOrigin(origin);
 
-	frame->body->setWorldTransform(trans);
+	frame->bt_body->setWorldTransform(trans);
 }
 
 complex_obj::~complex_obj()

@@ -1,14 +1,14 @@
 #pragma once
 #include "base_utils.h"
 #include "object_utils.h"
-class box_obj //: public py_obj
+class box_obj : public py_obj
 {
 public:
 	world* obj_world;
-	btRigidBody* body;
+	btRigidBody* bt_body;
 	IMeshSceneNode* irr_body;
 
-	box_obj(world* world, float size[3], int pos[3], int mass_param);
+	box_obj(world* world, std::array<float, 3> size, std::array<int, 3> pos = { 1,1,1 }, int mass_param = 1);
 	~box_obj();
 	void forward();
 	void stop();

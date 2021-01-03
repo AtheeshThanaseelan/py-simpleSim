@@ -33,6 +33,9 @@
     <ClCompile Include="complex_obj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple_objects.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="complex_obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

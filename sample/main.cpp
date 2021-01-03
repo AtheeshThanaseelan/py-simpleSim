@@ -5,23 +5,13 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "serializer.h"
+
+
 namespace py = pybind11;
+//Controllers
 
-/*Controllers
-
-Python Object Controller:
-Interface for python to direct and obtain statistics on objects in the world (create object, find position)
-
-Python World Controller:
-Interface for python to direct and obtain statistics on objects on the world (create wind, determine "weather")
-
-Logic Controller:
-Controls all objects > has them in objects
-Move objects
-Calculate any logic for world
-
-*/
-
+//Classes
 /* Classes
 * World Object (for graphics and physics)
 * Complex World Object (for extras (wind, air density)
@@ -32,7 +22,8 @@ Calculate any logic for world
 * Complex(logic) Object
 * Camera Object
 */
-
+//Old tests
+/*
 //Helicopter
 void test1()
 {
@@ -254,42 +245,47 @@ void test4()
 	delete main_world;
 }
 
-
-/* Serialization
-* BTSerialize
-* Manually Serialize
-* Binary
-* 
-* Important data
-*	- Physical data
-*	- Object specific properties
-*	- World properties
-* Graphical representation, Object collision shape, etc, can be inferred from object type
-* 
-*	Simple Objects
-*		Static: Type, Transform
-*		Nonstatic: ^, linear velocity, angular velocity, mass
-*
-* 
-* 
 */
-void test5()
+//Naming Scheme
+/*
+* Private: m_ 
+* 
+* Objects for use in world: obj_
+*	Simple: obj_simple
+*	Complex: obj_comp
+* 
+* Containers
+*	?External Driver Containers (etc)
+*	Physics Object Containers
+*	?Graphics Object Container
+*	Complex Object Container
+*	
+* 
+* Interfaces/Controllers like py_obj, etc: control_
+*	Object Interface: Apply and Return Basic Information
+*	Complex Object Interface: Apply and Return Complex Information
+*	Interactive Object Interface
+*	?Self Controlling Object Interface
+*/
+
+
+//Test obj_interface
+//
+void test1()
 {
 	world* main_world = new world(controller);
-	new terrain_obj(main_world);
-	box_obj* box;
-	{
-		float size[] = { 1,1,1 };
-		int pos[] = { 0,0,0 };
-		box = new box_obj(main_world, new float[] {1, 1, 1}, new int[] { 0, 0, 0 }, 0);
-		box->body->setGravity(btVector3(0, -9.8, 0));
-	}
+	terrain_obj* terr = new terrain_obj(main_world);
+	
+	std::array<float,3> size = {1,1,1};
+	std::array<int, 3> pos = { 0,5,0 };
+	py_obj* box = new box_obj(main_world,size, pos, 5);
+	
+	
 	while (main_world->device->run())
 	{
 		main_world->update();
-		main_world->framerate();
-		//std::cout << box->body->getWorldTransform();
-		//std::ios::binary.read();
+		if (controller->IsKeyDown(KEY_KEY_A))
+			std::cout << box->getProperties() << std::endl;
 	}
 }
 
@@ -305,6 +301,7 @@ void test5()
 			case 1:
 				test1();
 				break;
+/*
 			case 2:
 				test2();
 				break;
@@ -320,11 +317,20 @@ void test5()
 			case 5:
 				test5();
 				break;
-			/*
+			
 			case 6:
 				test6();
 				break;
-			*/
+			case 7:
+				test7();
+				break;
+			case 8:
+				test8();
+				break;
+			case 9:
+				test9();
+				break;
+*/
 			}
 		} while (choice != 0);
 
@@ -335,23 +341,34 @@ void test5()
 #else
 	PYBIND11_MODULE(sample, m) 
 	{
+		py::class_<py_obj>(m, "py_obj")
+			.def("getProperties", &py_obj::getProperties, R"pbdoc(Get the object properties)pbdoc")
+			.def("setTransform_qat", &py_obj::setTransform_qat, R"pbdoc(Set the object transform as a quaternion)pbdoc")
+			.def("getTransform_qat", &py_obj::getTransform_qat, R"pbdoc(Get the object transform as a quaternion)pbdoc");
 
-		py::class_<py_obj>(m, "py_obj");
+		//Working with simple box_obj 
+		py::class_<box_obj, py_obj>(m, "box_obj")
+			.def(py::init([](pyWorld* world, std::array<float, 3> size, std::array<int, 3> pos) {
+				return std::unique_ptr<box_obj>(new box_obj(world->main, size, pos));
+			}));
+		m.def("create_box_obj", [](pyWorld* world, std::array<float, 3> size, std::array<int, 3> pos) { return std::unique_ptr<py_obj>(new box_obj(world->main,size,pos)); });
 
+		
 		//Working with complex_obj
-		py::class_<complex_obj, py_obj>(m, "complex_obj")
-			.def(py::init<pyWorld*>())
-			.def("update_logic", &complex_obj::update_logic, R"pbdoc(Update the helicopter logic)pbdoc")
-			.def("getProperties", &complex_obj::getProperties, R"pbdoc(Get the helicopter properties)pbdoc")
-			.def("setTransform_qat", &complex_obj::setTransform_qat, R"pbdoc(Set the helicopter transform as a quaternion)pbdoc")
-			.def("getTransform_qat", &complex_obj::getTransform_qat, R"pbdoc(Get the helicopter transform as a quaternion)pbdoc");
-		m.def("create_complex", [](pyWorld* arg) { return std::unique_ptr<py_obj>(new complex_obj(arg)); });
+		py::class_<complex_obj, py_obj>(m, "complex_obj");
+			//.def(py::init<pyWorld*>())
+			//.def("update_logic", &complex_obj::update_logic, R"pbdoc(Update the helicopter logic)pbdoc")
+		//m.def("create_complex", [](pyWorld* arg) { return std::unique_ptr<py_obj>(new complex_obj(arg->main)); });
+		
 
+		//Working with terrain
+		py::class_<terrain_obj>(m, "terrain_obj")
+			.def(py::init([](pyWorld* world) {return  std::unique_ptr<terrain_obj>(new terrain_obj(world->main)); }));
+		
 		//Working with world
 		py::class_<pyWorld>(m, "pyWorld")
 			.def(py::init<>())
 			.def("update", &pyWorld::update);
-
 
 		#ifdef VERSION_INFO
 			m.attr("__version__") = VERSION_INFO;

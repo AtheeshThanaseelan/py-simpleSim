@@ -1,10 +1,9 @@
 #include "simple_objects.h"
 
-box_obj::box_obj(world* world,float size[3], int pos[3], int mass_param) :obj_world(world)
+box_obj::box_obj(world* world, std::array<float, 3> size, std::array<int, 3> pos, int mass_param) :obj_world(world)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
 	obj_world->collisionShapes.push_back(colShape);
-
 	/// Create Dynamic Objects
 	btTransform startTransform;
 	startTransform.setIdentity();
@@ -14,44 +13,41 @@ box_obj::box_obj(world* world,float size[3], int pos[3], int mass_param) :obj_wo
 	startTransform.setIdentity();
 	startTransform.setOrigin(btVector3(pos[0], pos[1],pos[2]));
 
-	body = createRigidBody(world, mass, startTransform, colShape);
+	bt_body = createRigidBody(world, mass, startTransform, colShape);
 
 	irr_body = create_node(world, size);
-	body->setUserPointer(irr_body);
-
-	delete size;
-	delete pos;
+	bt_body->setUserPointer(irr_body);
 }
 
 box_obj::~box_obj()
 {
-	if (body && body->getMotionState())
+	if (bt_body && bt_body->getMotionState())
 	{
-		delete body->getMotionState();
+		delete bt_body->getMotionState();
 	}
-	obj_world->dynamicsWorld->removeCollisionObject(body);
+	obj_world->dynamicsWorld->removeCollisionObject(bt_body);
 
-	btCollisionShape* shape = body->getCollisionShape();
+	btCollisionShape* shape = bt_body->getCollisionShape();
 	obj_world->collisionShapes.remove(shape);
 	delete shape;
 
-	obj_world->dynamicsWorld->removeRigidBody(body);
+	obj_world->dynamicsWorld->removeRigidBody(bt_body);
 	obj_world->scenemgr->addToDeletionQueue(irr_body);
-	delete body;
+	delete bt_body;
 }
 
 void box_obj::forward()
 {
-	body->setActivationState(DISABLE_DEACTIVATION);
+	bt_body->setActivationState(DISABLE_DEACTIVATION);
 	btVector3 f(100,0, 0);
-	body->applyCentralImpulse(f);
+	bt_body->applyCentralImpulse(f);
 }
 
 void box_obj::stop()
 {
-		body->setActivationState(DISABLE_DEACTIVATION);
+	bt_body->setActivationState(DISABLE_DEACTIVATION);
 		btVector3 f(-100, 0, 0);
-		body->applyCentralImpulse(f);
+		bt_body->applyCentralImpulse(f);
 }
 
 terrain_obj::terrain_obj(world* world) :obj_world(world)
@@ -81,7 +77,7 @@ terrain_obj::terrain_obj(world* world) :obj_world(world)
 	irr_planeNode = obj_world->scenemgr->addAnimatedMeshSceneNode(hillPlaneMesh);
 	irr_planeNode->setMaterialTexture(0, obj_world->driver->getTexture("../textures/ground.jpg"));
 	irr_planeNode->setMaterialFlag(video::EMF_LIGHTING, false);
-	irr_planeNode->setPosition(core::vector3df(0, 0, 0));
+	irr_planeNode->setPosition(core::vector3df(0, 1, 0));
 }
 
 terrain_obj::~terrain_obj()
