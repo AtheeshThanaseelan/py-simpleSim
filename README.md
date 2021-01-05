@@ -1,5 +1,5 @@
 # C++ Physics Environment
-Can be ran as a standalone C++ executable, or linked with python (with "library_version" branch).
+Can be ran as a standalone C++ executable, or linked with python.
 
 Requires Irrlicht and Bullet3 libraries
 
