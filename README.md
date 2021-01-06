@@ -1,5 +1,9 @@
 # C++ Physics Environment
-Can be ran as a standalone C++ executable, or linked with python (with "library_version" branch).
+
+This branch is for the current code refactoring undertaking. Once functionality is restored it will be merged back to master.
+
+
+Can be ran as a standalone C++ executable, or linked with python
 
 Requires Irrlicht and Bullet3 libraries
 
