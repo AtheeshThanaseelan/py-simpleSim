@@ -1,4 +1,7 @@
-#include "base_utils.h"
+
+//#include "base_utils.h"
+//#include <vector>
+/*
 #include "simple_objects.h"
 #include "compound_obj.h"
 #include "complex_obj.h"
@@ -9,284 +12,278 @@
 
 
 namespace py = pybind11;
-//Controllers
-
-//Classes
-/* Classes
-* World Object (for graphics and physics)
-* Complex World Object (for extras (wind, air density)
-* Const Static Controller Object
-* 
-* Simple Objects
-* Compound Object
-* Complex(logic) Object
-* Camera Object
 */
-//Old tests
-/*
-//Helicopter
-void test1()
-{
-	//Helicopter
-//Helicopter is lifted by force on rotor
-//Rotor force is relative to collective and engine rpm
-//engine rpm depends on environment(air density, load, etc)
-//update logic along with world
 
-	key_controller* controller = new key_controller{};
-	world* main_world = new world{ controller };
-	new terrain_obj(main_world);
-	complex_obj* heli = new complex_obj(main_world);
-	camera* cam = new camera(main_world,heli->frame->irr_body);
+#include <bullet/btBulletDynamicsCommon.h>
+#include <irrlicht/irrlicht.h>
+#include <iostream>
+#include <fstream>
+#include <array>
 
-	while (main_world->device->run() && main_world->driver)
-	{
-		cam->update();
-		main_world->update();
-		main_world->framerate();
-		heli->update_logic();
-		if (controller->IsKeyDown(KEY_KEY_P))
-		{
-			heli->direct(complex_obj::direction::up);
-		}
-		if (controller->IsKeyDown(KEY_KEY_L))
-		{
-			heli->direct(complex_obj::direction::down);
-		}
-		if (controller->IsKeyDown(KEY_KEY_W))
-		{
-			heli->direct(complex_obj::direction::front);
-		}
-		if (controller->IsKeyDown(KEY_KEY_S))
-		{
-			heli->direct(complex_obj::direction::back);
-		}
-		if (controller->IsKeyDown(KEY_KEY_A))
-		{
-			heli->direct(complex_obj::direction::l_left);
-		}
-		if (controller->IsKeyDown(KEY_KEY_D))
-		{
-			heli->direct(complex_obj::direction::l_right);
-		}
-		if (controller->IsKeyDown(KEY_KEY_Q))
-		{
-			heli->direct(complex_obj::direction::y_left);
-		}
-		if (controller->IsKeyDown(KEY_KEY_E))
-		{
-			heli->direct(complex_obj::direction::y_right);
-		}
-		if(controller->IsKeyDown(KEY_SPACE))
-		{
-			std::cout << "n" << std::endl;
-			heli->direct(complex_obj::direction::neutral);
-		}
-		if (controller->IsKeyDown(KEY_KEY_I))
-		{
-			std::array<float,7> ok= heli->getTransform_qat();
-			for (int i=0; i<7;i++)
-			{
-				std::cout << ok[i] << std::endl;
-			}
-			std::cout << heli->getProperties() << std::endl;
-			system("cls");
-		}
-		if (controller->IsKeyDown(KEY_KEY_T))
-		{
-			std::array<float, 7> set = { {0.5,0.5,0.5,0.5,1,1,1} };
-			heli->setTransform_qat(set);
-		}
+using namespace irr;
+using namespace core;
+using namespace scene;
+using namespace video;
+using namespace io;
+using namespace gui;
 
-
-	}
-	delete main_world;
-	delete controller;
-}
-
-//bike
-void test2()
-{
-	key_controller* controller = new key_controller{};
-	world* main_world = new world{ controller };
-	new terrain_obj(main_world);
-	compound_obj* heli = new compound_obj(main_world);
-	camera* cam = new camera(main_world, heli->irr_main_body);
-	cam = new camera(main_world);
-
-	while (main_world->device->run() && main_world->driver)
-	{
-		cam->update();
-		main_world->update();
-		main_world->framerate();
-		//heli->update_logic();
-		if (controller->IsKeyDown(KEY_KEY_P))
-		{
-			heli->direct(complex_obj::direction::up);
-		}
-		if (controller->IsKeyDown(KEY_KEY_L))
-		{
-			heli->direct(complex_obj::direction::down);
-		}
-		if (controller->IsKeyDown(KEY_KEY_W))
-		{
-			heli->direct(complex_obj::direction::front);
-		}
-		if (controller->IsKeyDown(KEY_KEY_S))
-		{
-			heli->direct(complex_obj::direction::back);
-		}
-		if (controller->IsKeyDown(KEY_KEY_A))
-		{
-			heli->direct(complex_obj::direction::l_left);
-		}
-		if (controller->IsKeyDown(KEY_KEY_D))
-		{
-			heli->direct(complex_obj::direction::l_right);
-		}
-		if (controller->IsKeyDown(KEY_KEY_Q))
-		{
-			heli->direct(complex_obj::direction::y_left);
-		}
-		if (controller->IsKeyDown(KEY_KEY_E))
-		{
-			heli->direct(complex_obj::direction::y_right);
-		}
-		if (controller->IsKeyDown(KEY_SPACE))
-		{
-			std::cout << "n" << std::endl;
-			heli->direct(complex_obj::direction::neutral);
-		}
-		if (controller->IsKeyDown(KEY_KEY_I))
-		{
-			std::array<float, 7> ok = heli->getTransform_qat();
-			for (int i = 0; i < 7; i++)
-			{
-				std::cout << ok[i] << std::endl;
-			}
-			std::cout << heli->getProperties() << std::endl;
-			system("cls");
-		}
-		if (controller->IsKeyDown(KEY_KEY_T))
-		{
-			std::array<float, 7> set = { {0.5,0.5,0.5,0.5,1,1,1} };
-			heli->setTransform_qat(set);
-		}
-
-
-	}
-	delete main_world;
-	delete controller;
-}
-
-//Visualizations
-void test3()
-{
-	world* main_world = new world(controller);
-	//new terrain_obj(main_world);
-	box_obj* box;
-	{
-		float size[] = { 1,1,1 };
-		int pos[] = { 0,10,0 };
-		box = new box_obj(main_world, new float[] {3, 3, 3}, new int[]{ 0,10,0 }, 12);
-	}
-	//Arrow
-	IAnimatedMesh* cubeNode = main_world->scenemgr->addArrowMesh("OK");//("", video::SColor(0, 255, 0, 255), video::SColor(0, 255, 0, 255),4,8,10.f,20.f,0.5f,5.f);//addCubeSceneNode(1.0f, 0, 0, vector3df(0, 0, 0), vector3df(0, 0, 0), vector3df(0,0,0));
-	IAnimatedMeshSceneNode* arrow = main_world->scenemgr->addAnimatedMeshSceneNode(cubeNode);
-	
-	while (main_world->device->run())
-	{
-		main_world->update();
-		main_world->framerate();
-		
-
-	}
-	
-}
-
-//Benchmarks
-//setGravity is in m/s^2
-//position is in meters
-//The new timer is accurate compared to the RTC timer
-//Fixed timestep leads to reproducable results
-void test4()
-{
-	//Base Utility
-	//Count time in the update loop?
-	world* main_world = new world(controller);
-	//new terrain_obj(main_world);
-	box_obj* box;
-	{
-		float size[] = { 1,1,1 };
-		int pos[] = { 0,0,0 };
-		box = new box_obj(main_world, new float[] {1, 1, 1}, new int[] { 0, 0, 0 }, 1);
-		box->body->setGravity(btVector3(0, -9.8, 0));
-	}
-
-	float start = main_world->device->getTimer()->getTime();
-	world_timer* ok = new world_timer();
-	while (main_world->device->run())
-	{
-		main_world->update();
-		main_world->framerate();
-		ok->advance();
-		std::cout << box->body->getWorldTransform().getOrigin().getY() << std::endl;
-		if (box->body->getWorldTransform().getOrigin().getY() < -10)
-		{
-			float end = main_world->device->getTimer()->getTime();
-			std::cout << std::endl << end-start << std::endl;
-			std::cout << std::endl << ok->get_time() << std::endl;
-			break;
-		}
-
-	}
-	delete ok;
-	delete box;
-	delete main_world;
-}
-
-*/
 //Naming Scheme
 /*
 * Private: m_ 
-* 
-* Objects for use in world: obj_
-*	Simple: obj_simple
-*	Complex: obj_comp
-* 
-* Containers
-*	?External Driver Containers (etc)
-*	Physics Object Containers
-*	?Graphics Object Container
-*	Complex Object Container
-*	
-* 
 * Interfaces/Controllers like py_obj, etc: control_
-*	Object Interface: Apply and Return Basic Information
-*	Complex Object Interface: Apply and Return Complex Information
-*	Interactive Object Interface
-*	?Self Controlling Object Interface
 */
 
+//Outline
+/*
+* Modules: expose an common api regardless of library used
+*	Input
+*	Graphics
+*	Physics
+*	Timer(in simulation as well as realtime)
+* 
+* Composites:
+*	Simple: Simulate only physics, and have a graphical representation
+*	Complex: Simulate "simple", as well as logical variables such as air density, etc.
+*	Independant: Allow computer generated input
+*	
+* Objects:
+*	Simple: Exists with only physical properties
+*	Complex: Must take complex properties into account each update
+* 
+*/
 
-//Test obj_interface
-//
+class inp : public IEventReceiver
+{
+public:
+
+	bool KeyIsDown[KEY_KEY_CODES_COUNT];
+
+	// This is the one method that we have to implement
+	bool OnEvent(const SEvent& event)
+	{
+		// Remember whether each key is down or up
+		if (event.EventType == irr::EET_KEY_INPUT_EVENT)
+			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+
+		return false;
+	}
+
+	// This is used to check whether a key is being held down
+	bool IsKeyDown(EKEY_CODE keyCode) const
+	{
+		return KeyIsDown[keyCode];
+	}
+
+	void clear(EKEY_CODE keyCode)
+	{
+		KeyIsDown[keyCode] = false;
+	}
+
+	inp()
+	{
+		for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
+			KeyIsDown[i] = false;
+	}
+};
+
+class gfx
+{
+public:
+	IrrlichtDevice* device;
+	IVideoDriver* driver;
+	ISceneManager* scenemgr;
+	
+	std::array<ICameraSceneNode*, 5> cameras;
+
+	gfx(IEventReceiver* ok)
+	{
+		device = createDevice(video::EDT_OPENGL,
+			dimension2d<u32>(800, 600), 32, false, false, true, ok);
+		driver = device->getVideoDriver();
+		scenemgr = device->getSceneManager();
+		//guienv = device->getGUIEnvironment();
+		device->setWindowCaption(L"Sample Program");
+		//env = device->getGUIEnvironment();
+
+		ICameraSceneNode* cameraNode;
+		cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
+		cameraNode->setPosition(vector3df(0, 10, -70));
+	}
+
+	~gfx()
+	{
+		device->drop();
+		delete device;
+	}
+
+	void addCamera()
+	{
+		ICameraSceneNode* cameraNode;
+		cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
+		cameraNode->setPosition(vector3df(0, 10, -70));
+		cameras[0] = cameraNode;
+	}
+
+	void setCamera()
+	{
+		ICameraSceneNode* cameraNode = cameras[0];
+		scenemgr->setActiveCamera(cameraNode);
+	}
+
+	void update()
+	{
+		/*
+		fps = driver->getFPS();
+		stringw titlebar;
+		titlebar += "] FPS:";
+		titlebar += fps;
+		device->setWindowCaption(titlebar.c_str());
+		*/
+		driver->beginScene(true, true, video::SColor(180, 0, 0, 255));
+		scenemgr->drawAll();
+		driver->endScene();
+	}
+};
+
+//Motionstate
+class physics 
+{
+public:
+	btBroadphaseInterface* overlappingPairCache;
+	btCollisionDispatcher* dispatcher;
+	btDefaultCollisionConfiguration* collisionConfiguration;
+	btDiscreteDynamicsWorld* dynamicsWorld;
+	btSequentialImpulseConstraintSolver* solver;
+	btAlignedObjectArray<btCollisionShape*> collisionShapes;
+
+	physics()
+	{
+		///--- World Creation
+		///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+		collisionConfiguration = new btDefaultCollisionConfiguration();
+
+		///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+		dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+		///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+		overlappingPairCache = new btDbvtBroadphase();
+
+		///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+		solver = new btSequentialImpulseConstraintSolver;
+
+		dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+		dynamicsWorld->setGravity(btVector3(0, -10, 0));
+	}
+	~physics()
+	{
+		for (int count = dynamicsWorld->getNumCollisionObjects() - 1; count >= 0; count--)
+		{
+			btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[count];
+			btRigidBody* body = btRigidBody::upcast(obj);
+			if (body && body->getMotionState())
+			{
+				delete body->getMotionState();
+			}
+			dynamicsWorld->removeCollisionObject(obj);
+			delete obj;
+		}
+		for (int count = 0; count < collisionShapes.size(); count++)
+		{
+			btCollisionShape* shape = collisionShapes[count];
+			collisionShapes[count] = 0;
+			delete shape;
+		}
+		delete dynamicsWorld;
+		delete solver;
+		delete overlappingPairCache;
+		delete dispatcher;
+		delete collisionConfiguration;
+	}
+	void update()
+	{
+		const f32 frameDeltaTime = (f32)(1.f / 60.f);
+		dynamicsWorld->stepSimulation(frameDeltaTime, 2);
+	}
+	
+	btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape)
+	{
+		btAssert((!shape || shape->getShapeType() != INVALID_SHAPE_PROXYTYPE));
+
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+
+		btVector3 localInertia(0, 0, 0);
+		if (isDynamic)
+			shape->calculateLocalInertia(mass, localInertia);
+
+		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+
+		btRigidBody::btRigidBodyConstructionInfo cInfo(mass, myMotionState, shape, localInertia);
+
+		btRigidBody* body = new btRigidBody(cInfo);
+		//body->setContactProcessingThreshold(m_defaultContactProcessingThreshold);
+
+		body->setUserIndex(-1);
+		dynamicsWorld->addRigidBody(body);
+		return body;
+	}
+	
+	btRigidBody* addBox(std::array<float, 3> size, std::array<int, 3> pos, int mass_param)
+	{
+		btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
+		collisionShapes.push_back(colShape);
+		/// Create Dynamic Objects
+		btTransform startTransform;
+		startTransform.setIdentity();
+
+		btScalar mass(mass_param * 1.f);
+
+		startTransform.setIdentity();
+		startTransform.setOrigin(btVector3(pos[0], pos[1], pos[2]));
+
+		 return createRigidBody(mass, startTransform, colShape);
+	}
+};
+
 void test1()
 {
-	world* main_world = new world(controller);
-	terrain_obj* terr = new terrain_obj(main_world);
-	
-	std::array<float,3> size = {1,1,1};
-	std::array<int, 3> pos = { 0,5,0 };
-	py_obj* box = new box_obj(main_world,size, pos, 5);
-	
-	
-	while (main_world->device->run())
-	{
-		main_world->update();
-		if (controller->IsKeyDown(KEY_KEY_A))
-			std::cout << box->getProperties() << std::endl;
-	}
+	IEventReceiver* control = new inp();
+	gfx* screen = new gfx(control);
+	physics* sim = new physics();
+	std::array<float, 3> size = { 1,1,1 };
+	std::array<int, 3> pos = { 10,10,10 };
+	sim->addBox(size, pos, 0);
+
+
+	std::ofstream myFile("data.bin", std::ios::out | std::ios::binary);
+	myFile.write((char*)&sim, sizeof(sim));
+
+	//Update Object needs gfx, physics and properties
+		//Hold all pointers in object, and update all at once
+			//More memory use?
+			//More shallow object heirachy
+			//Loop for all updates
+		//User pointer on physics object hold gfx rep
+			//Update phys+gfx, then loop again for complex object
+		//User pointer can also hold entire object for looping through
+			//No need for multiple loops
+			//Must use bullet collision object array
+			//All objects need physical representation
+
+}
+
+void test2()
+{
+	physics* sim;
+	std::fstream myFile("data.bin", std::ios::in | std::ios::binary);
+	myFile.read((char*)&sim, sizeof(sim));
+
+	btCollisionObject* obj = sim->dynamicsWorld->getCollisionObjectArray()[0];
+	btRigidBody* body = btRigidBody::upcast(obj);
+	std::cout << body->getWorldTransform().getOrigin().getY();
 }
 
 #if defined _DEBUG
@@ -301,11 +298,10 @@ void test1()
 			case 1:
 				test1();
 				break;
-/*
 			case 2:
 				test2();
 				break;
-			
+/*
 			case 3:
 				test3();
 				break;
