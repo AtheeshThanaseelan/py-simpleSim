@@ -58,7 +58,6 @@ public:
 
 	bool KeyIsDown[KEY_KEY_CODES_COUNT];
 
-	// This is the one method that we have to implement
 	bool OnEvent(const SEvent& event)
 	{
 		// Remember whether each key is down or up
@@ -68,16 +67,16 @@ public:
 		return false;
 	}
 
-	// This is used to check whether a key is being held down
 	bool IsKeyDown(EKEY_CODE keyCode) const
 	{
 		return KeyIsDown[keyCode];
 	}
-
+	/*
 	void clear(EKEY_CODE keyCode)
 	{
 		KeyIsDown[keyCode] = false;
 	}
+	*/
 
 	inp()
 	{
@@ -92,8 +91,6 @@ public:
 	IrrlichtDevice* device;
 	IVideoDriver* driver;
 	ISceneManager* scenemgr;
-	
-	std::array<ICameraSceneNode*, 5> cameras;
 
 	gfx(IEventReceiver* ok)
 	{
@@ -104,46 +101,30 @@ public:
 		//guienv = device->getGUIEnvironment();
 		device->setWindowCaption(L"Sample Program");
 		//env = device->getGUIEnvironment();
-
+		
 		ICameraSceneNode* cameraNode;
 		cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
 		cameraNode->setPosition(vector3df(0, 10, -70));
+		
 	}
 
 	~gfx()
 	{
+		device->closeDevice();
+		device->run();
 		device->drop();
-		delete device;
-	}
-
-	void addCamera()
-	{
-		ICameraSceneNode* cameraNode;
-		cameraNode = scenemgr->addCameraSceneNodeFPS(NULL, 20.0f, 0.02f);
-		cameraNode->setPosition(vector3df(0, 10, -70));
-		cameras[0] = cameraNode;
-	}
-
-	void setCamera()
-	{
-		ICameraSceneNode* cameraNode = cameras[0];
-		scenemgr->setActiveCamera(cameraNode);
+		//delete device;
 	}
 
 	void update()
 	{
-		/*
-		fps = driver->getFPS();
-		stringw titlebar;
-		titlebar += "] FPS:";
-		titlebar += fps;
-		device->setWindowCaption(titlebar.c_str());
-		*/
 		driver->beginScene(true, true, video::SColor(180, 0, 0, 255));
 		scenemgr->drawAll();
 		driver->endScene();
 	}
 };
+
+
 
 //Motionstate
 class physics 
@@ -248,42 +229,147 @@ public:
 	}
 };
 
+
+class irr_box
+{
+public:
+	gfx* m_gEngine;
+	ISceneNode* m_box;
+
+	irr_box(gfx* gEngine) :m_gEngine{ gEngine }
+	{
+		std::array<float, 3> size = { 1,1,1 };
+		IMeshSceneNode* cubeNode = gEngine->scenemgr->addCubeSceneNode(1.0f, 0, 0, vector3df(0, 0, 0), vector3df(0, 0, 0), vector3df(size[0] * 2, size[1] * 2, size[2] * 2));
+		cubeNode->setMaterialType(EMT_SOLID);
+		cubeNode->setMaterialTexture(0, gEngine->driver->getTexture("../textures/box.jpg"));
+		cubeNode->setMaterialFlag(video::EMF_LIGHTING, false);
+		cubeNode->setVisible(true);
+		m_box = cubeNode;
+	}
+
+	void setTrans(std::array<float,7> trans)
+	{
+		quaternion q(trans[3], trans[4], trans[5], trans[6]);
+		vector3df Euler;
+		q.toEuler(Euler);
+		Euler *= RADTODEG;
+
+		m_box->setPosition(vector3df(trans[0], trans[1], trans[2]));
+		m_box->setRotation(Euler);
+		m_box->setVisible(true);
+	}
+};
+
+class b_box 
+{
+public:
+	btRigidBody* m_pBody;
+	physics* m_pEngine;
+	b_box(physics* pEngine): m_pEngine{pEngine}
+	{
+		int mass_param = 1;
+
+		btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
+		pEngine->collisionShapes.push_back(colShape);
+		/// Create Dynamic Objects
+		btTransform startTransform;
+		startTransform.setIdentity();
+
+		btScalar mass(mass_param * 1.f);
+
+		startTransform.setIdentity();
+		startTransform.setOrigin(btVector3(pos[0], pos[1], pos[2]));
+
+		bt_body = createRigidBody(world, mass, startTransform, colShape);
+	}
+};
+
+class box 
+{
+public:
+
+};
+
 void test1()
 {
-	IEventReceiver* control = new inp();
+	inp* controller = new inp();
+	IEventReceiver* control = controller;
 	gfx* screen = new gfx(control);
-	physics* sim = new physics();
-	std::array<float, 3> size = { 1,1,1 };
-	std::array<int, 3> pos = { 10,10,10 };
-	sim->addBox(size, pos, 0);
+	//irr_box* box = new irr_box(screen->addBox());
+	irr_box* box = new irr_box(screen);
+	while (screen->device->run())
+	{
+		screen->update();
+		if (controller->IsKeyDown(KEY_KEY_A))
+		{
+			std::array <float, 7> trans{ {1,1,1,1,1,1,1} };
+			box->setTrans(trans);
+		}
 
+		if (controller->IsKeyDown(KEY_KEY_D))
+		{
+			std::array <float, 7> trans{ {0,0,0,10,0,0,1} };
+			box->setTrans(trans);
+		}
+	}
+	delete screen;
+	delete control;
 
-	std::ofstream myFile("data.bin", std::ios::out | std::ios::binary);
-	myFile.write((char*)&sim, sizeof(sim));
+	//Generics vs Library Specifics
+		//Generics only work with standard C++ data
+		//Library specifics must not interact closely with engine
+
+	//Translators
+		//Take in library specifics and export C++ standards
+		//Box
+			//Irrlicht
+				//Input and save graphics engine
+				//Export setter
+			//Bullet
+				//Input and save physics engine
+				//Export setters and getters
+			//Composite
+				//Holds Irrlicht and Bullet boxes
+				//Update both together
+				//Export setters and getters
+	
+	//Translator Use
+		//Downcast and initialize using engine
+		//Upcast back to box and use
+		//^this is dumb
+
+		//Downcast and initlize engine
+		//Upcase back to engine and use
+		//Use template to make boxes
+			//Engine provides methods to abstract to standard C++
+
+	//Object Hierarchy
+		//GFX object can only be updated 
+		//Physics Engine can be set and updated
+		//Complex Engine affects how gfx and physics are updated
+
 
 	//Update Object needs gfx, physics and properties
 		//Hold all pointers in object, and update all at once
 			//More memory use?
 			//More shallow object heirachy
 			//Loop for all updates
-		//User pointer on physics object hold gfx rep
-			//Update phys+gfx, then loop again for complex object
-		//User pointer can also hold entire object for looping through
-			//No need for multiple loops
-			//Must use bullet collision object array
-			//All objects need physical representation
 
+	//Binary Serialization
+		//Useful for serializing all properties of external libraries with low complexity
+		//Must manage link between objects somehow
 }
 
 void test2()
 {
-	physics* sim;
-	std::fstream myFile("data.bin", std::ios::in | std::ios::binary);
-	myFile.read((char*)&sim, sizeof(sim));
-
+	gfx* test;
+	std::fstream myFile("gfx.bin", std::ios::in | std::ios::binary);
+	myFile.read((char*)&test, sizeof(test));
+	/*
 	btCollisionObject* obj = sim->dynamicsWorld->getCollisionObjectArray()[0];
 	btRigidBody* body = btRigidBody::upcast(obj);
 	std::cout << body->getWorldTransform().getOrigin().getY();
+	*/
 }
 
 #if defined _DEBUG
