@@ -13,48 +13,72 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\external">
+      <UniqueIdentifier>{592aea97-ed36-4f2c-ae84-43469805f958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\external">
+      <UniqueIdentifier>{65feca7b-2f75-420c-a57a-4fc4b6fce00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\objects">
+      <UniqueIdentifier>{759a555b-2e7c-47a9-9fd1-d5df667d3958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\objects">
+      <UniqueIdentifier>{d644a28c-97b8-48b3-b378-bdd1f805392e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utility">
+      <UniqueIdentifier>{50de27f5-3229-4d20-ac15-4f28a20464af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utility">
+      <UniqueIdentifier>{70a67ee8-d68f-4fe1-ac71-b844cf92c8f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="simple_objects.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="base_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\external\bPhysics.cpp">
+      <Filter>Source Files\external</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\external\irrlicht.cpp">
+      <Filter>Source Files\external</Filter>
     </ClCompile>
-    <ClCompile Include="object_utils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\external\pPhysics.cpp">
+      <Filter>Source Files\external</Filter>
     </ClCompile>
-    <ClCompile Include="compound_obj.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\objects\objectWrapper.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="complex_obj.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\objects\complexObject.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="serializer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\utility\utilities.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\objects\compoundObject.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="simple_objects.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\external\bPhysics.h">
+      <Filter>Header Files\external</Filter>
     </ClInclude>
-    <ClInclude Include="base_utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\external\irrlicht.h">
+      <Filter>Header Files\external</Filter>
     </ClInclude>
-    <ClInclude Include="object_utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\external\pPhysics.h">
+      <Filter>Header Files\external</Filter>
     </ClInclude>
-    <ClInclude Include="compound_obj.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\objects\objectWrapper.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="complex_obj.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\objects\complexObject.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
-    <ClInclude Include="serializer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\utility\utilities.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\objects\compoundObject.h">
+      <Filter>Header Files\objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
