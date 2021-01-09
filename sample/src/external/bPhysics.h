@@ -21,6 +21,6 @@ public:
 	btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
 
 
-	btRigidBody* addBox();
+	btRigidBody* getBox();
 
 };

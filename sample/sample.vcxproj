@@ -31,6 +31,19 @@
     <ClCompile Include="src\external\irrlicht.cpp" />
     <ClCompile Include="src\external\pPhysics.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\objects\complexObject.cpp" />
+    <ClCompile Include="src\objects\compoundObject.cpp" />
+    <ClCompile Include="src\objects\objectWrapper.cpp" />
+    <ClCompile Include="src\utility\utilities.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\external\bPhysics.h" />
+    <ClInclude Include="src\external\irrlicht.h" />
+    <ClInclude Include="src\external\pPhysics.h" />
+    <ClInclude Include="src\objects\complexObject.h" />
+    <ClInclude Include="src\objects\compoundObject.h" />
+    <ClInclude Include="src\objects\objectWrapper.h" />
+    <ClInclude Include="src\utility\utilities.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -1,4 +1,5 @@
 #include "bPhysics.h"
+#include <array>
 
 bPhysics::bPhysics()
 {
@@ -18,6 +19,24 @@ bPhysics::bPhysics()
 	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
 	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+
+	//Make plane
+	std::array<float, 3> size{ 0,1,0 };
+	std::array<int, 3> pos{ 0,-5,0 };
+	int mass_param = 0;
+	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(size[0], size[1], size[2]), 0);
+	collisionShapes.push_back(colShape);
+	/// Create Dynamic Objects
+	btTransform startTransform;
+	startTransform.setIdentity();
+
+	btScalar mass(mass_param * 1.f);
+
+	startTransform.setIdentity();
+	startTransform.setOrigin(btVector3(pos[0], pos[1], pos[2]));
+
+	btRigidBody* ter = createRigidBody(mass, startTransform, colShape);
+	ter->setFriction(10000);
 }
 
 bPhysics::~bPhysics()
@@ -71,16 +90,19 @@ btRigidBody* bPhysics::createRigidBody(float mass, const btTransform& startTrans
 	btRigidBody* body = new btRigidBody(cInfo);
 	//body->setContactProcessingThreshold(m_defaultContactProcessingThreshold);
 
+
 	body->setUserIndex(-1);
 	dynamicsWorld->addRigidBody(body);
 	return body;
 }
 
-btRigidBody* bPhysics::addBox()
+
+btRigidBody* bPhysics::getBox()
 {
 	std::array<float, 3> size {1,1,1};
 	std::array<int, 3> pos{ 1,1,1 };
 	int mass_param = 1;
+
 	btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
 	collisionShapes.push_back(colShape);
 	/// Create Dynamic Objects
