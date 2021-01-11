@@ -1,5 +1,6 @@
 #pragma once
 #include <irrlicht/irrlicht.h>
+#include <array>
 
 using namespace irr;
 using namespace core;
@@ -19,7 +20,7 @@ public:
 
 	~irr_gfx();
 
-	IMeshSceneNode* getBox();
+	IMeshSceneNode* getBox(std::array<float, 3> size = { 1,1,1 }, std::array<float, 3> pos = { 0,0,0 });
 
 	void update();
 };

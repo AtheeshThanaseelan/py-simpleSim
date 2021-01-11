@@ -1,5 +1,6 @@
 #pragma once
 #include <bullet/btBulletDynamicsCommon.h>
+#include <array>
 
 class bPhysics 
 {
@@ -21,6 +22,6 @@ public:
 	btRigidBody* createRigidBody(float mass, const btTransform& startTransform, btCollisionShape* shape);
 
 
-	btRigidBody* getBox();
+	btRigidBody* getBox(std::array<float, 3> size = { 1,1,1 }, std::array<float, 3> pos = { 1,1,1 }, int mass_param = 1);
 
 };

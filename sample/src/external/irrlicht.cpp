@@ -43,10 +43,9 @@ void irr_gfx::update()
 	driver->endScene();
 }
 
-IMeshSceneNode* irr_gfx::getBox()
+IMeshSceneNode* irr_gfx::getBox(std::array<float, 3> size,std::array<float,3> pos)
 {
-	std::array<float, 3> size{ 1,1,1 };
-	IMeshSceneNode* cubeNode = scenemgr->addCubeSceneNode(1.0f, 0, 0, vector3df(0, 0, 0), vector3df(0, 0, 0), vector3df(size[0] * 2, size[1] * 2, size[2] * 2));
+	IMeshSceneNode* cubeNode = scenemgr->addCubeSceneNode(1.0f, 0, 0, vector3df(pos[0], pos[1], pos[2]), vector3df(0, 0, 0), vector3df(size[0] * 2, size[1] * 2, size[2] * 2));
 	cubeNode->setMaterialType(EMT_SOLID);
 	cubeNode->setMaterialTexture(0, driver->getTexture("../textures/box.jpg"));
 	cubeNode->setMaterialFlag(video::EMF_LIGHTING, false);

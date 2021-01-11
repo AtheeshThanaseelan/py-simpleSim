@@ -1,5 +1,4 @@
 #include "bPhysics.h"
-#include <array>
 
 bPhysics::bPhysics()
 {
@@ -97,12 +96,8 @@ btRigidBody* bPhysics::createRigidBody(float mass, const btTransform& startTrans
 }
 
 
-btRigidBody* bPhysics::getBox()
+btRigidBody* bPhysics::getBox(std::array<float, 3> size , std::array<float, 3> pos , int mass_param )
 {
-	std::array<float, 3> size {1,1,1};
-	std::array<int, 3> pos{ 1,1,1 };
-	int mass_param = 1;
-
 	btCollisionShape* colShape = new btBoxShape(btVector3(size[0], size[1], size[2]));
 	collisionShapes.push_back(colShape);
 	/// Create Dynamic Objects
@@ -114,5 +109,10 @@ btRigidBody* bPhysics::getBox()
 	startTransform.setIdentity();
 	startTransform.setOrigin(btVector3(pos[0], pos[1], pos[2]));
 
-	return createRigidBody(mass, startTransform, colShape);
+	btRigidBody* bt_body = createRigidBody(mass, startTransform, colShape);
+
+	//Been causing problems
+	bt_body->setActivationState(DISABLE_DEACTIVATION);
+
+	return bt_body;
 }
