@@ -1,10 +1,10 @@
 # C++ Physics Environment
 
-This branch is for the current code refactoring undertaking. Once functionality is restored it will be merged back to master.
+Can be ran as a standalone C++ executable, or exported as a Python module.
 
+Requires Irrlicht, Bullet3, and pybind11 libraries.
 
-Can be ran as a standalone C++ executable, or linked with python
+The program creates a physics environment, as well as a visual representation of the objects in it. It also provides an interface, in C++ and Python, to interact with the object's physical properties. It also provides a world with properties, such as temperature, which can be used to affect how the behaves.
 
-Requires Irrlicht and Bullet3 libraries
+Eventually a Python program will be made to demonstrate moving data between Python and the environment.
 
-Current built with Visual studio, but will eventually be turned into makefiles
