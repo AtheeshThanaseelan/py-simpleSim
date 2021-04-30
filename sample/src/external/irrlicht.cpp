@@ -1,7 +1,9 @@
 #include "irrlicht.h"
 #include <array>
-irr_gfx::irr_gfx(IEventReceiver* ok)
+irr_gfx::irr_gfx(irr_inp* keys)
 {
+	m_inp = keys;
+	IEventReceiver* ok = keys;
 	device = createDevice(video::EDT_OPENGL,
 		dimension2d<u32>(800, 600), 32, false, false, true, ok);
 	driver = device->getVideoDriver();
@@ -33,14 +35,36 @@ irr_gfx::~irr_gfx()
 	device->closeDevice();
 	device->run();
 	device->drop();
-	//delete device;
 }
 
-void irr_gfx::update()
+bool irr_gfx::update()
 {
 	driver->beginScene(true, true, video::SColor(180, 0, 0, 255));
+	
+	for (int i=0; i < lines.size(); i++)
+	{
+		vector3df start{ lines.at(i)[0],lines.at(i)[1],lines.at(i)[2] };
+		vector3df end{ lines.at(i)[3],lines.at(i)[4],lines.at(i)[5] };
+
+		SMaterial m;
+		m.Lighting = false;
+		m.Thickness = 3.5f;
+		driver->setMaterial(m);
+		driver->setTransform(video::ETS_WORLD, core::matrix4());
+		driver->draw3DLine(start, end, SColor(0, 180, 0, 255));
+	}
+	lines.clear();
+	
 	scenemgr->drawAll();
+
 	driver->endScene();
+
+	return device->run();
+}
+
+void irr_gfx::add_line(std::array<float, 6> line)
+{
+	lines.push_back(line);
 }
 
 IMeshSceneNode* irr_gfx::getBox(std::array<float, 3> size,std::array<float,3> pos)
@@ -78,3 +102,5 @@ irr_inp::irr_inp()
 	for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
 		KeyIsDown[i] = false;
 }
+
+

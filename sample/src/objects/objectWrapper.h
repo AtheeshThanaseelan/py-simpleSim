@@ -25,6 +25,7 @@ public:
 	virtual void update();
 
 	objExport(btRigidBody* bt_body, IMeshSceneNode* irr_body);
+	objExport(btRigidBody* bt_body);
 	objExport(worldComposite* world);
 	//~objExport();
 

@@ -106,7 +106,7 @@ btRigidBody* bPhysics::getBox(std::array<float, 3> size , std::array<float, 3> p
 
 	btScalar mass(mass_param * 1.f);
 
-	startTransform.setIdentity();
+	startTransform.setIdentity(); 
 	startTransform.setOrigin(btVector3(pos[0], pos[1], pos[2]));
 
 	btRigidBody* bt_body = createRigidBody(mass, startTransform, colShape);

@@ -34,6 +34,9 @@
     <ClCompile Include="src\objects\complexObject.cpp" />
     <ClCompile Include="src\objects\compoundObject.cpp" />
     <ClCompile Include="src\objects\objectWrapper.cpp" />
+    <ClCompile Include="src\utility\irr_debug_draw.cpp" />
+    <ClCompile Include="src\utility\range_finder.cpp" />
+    <ClCompile Include="src\utility\region.cpp" />
     <ClCompile Include="src\utility\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +46,9 @@
     <ClInclude Include="src\objects\complexObject.h" />
     <ClInclude Include="src\objects\compoundObject.h" />
     <ClInclude Include="src\objects\objectWrapper.h" />
+    <ClInclude Include="src\utility\irr_debug_draw.h" />
+    <ClInclude Include="src\utility\range_finder.h" />
+    <ClInclude Include="src\utility\region.h" />
     <ClInclude Include="src\utility\utilities.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

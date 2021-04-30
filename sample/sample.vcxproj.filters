@@ -57,6 +57,15 @@
     <ClCompile Include="src\objects\compoundObject.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="src\utility\range_finder.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\irr_debug_draw.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utility\region.cpp">
+      <Filter>Source Files\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\external\bPhysics.h">
@@ -79,6 +88,15 @@
     </ClInclude>
     <ClInclude Include="src\objects\compoundObject.h">
       <Filter>Header Files\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility\range_finder.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility\irr_debug_draw.h">
+      <Filter>Header Files\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utility\region.h">
+      <Filter>Header Files\utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

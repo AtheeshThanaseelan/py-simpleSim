@@ -12,10 +12,11 @@ public:
 	int temp;
 
 	worldComposite(irr_inp* inp, irr_gfx* gfx, bPhysics* engine);
+	worldComposite(bPhysics* engine);
 
 	void addObject(objExport* newObj);
-
-	void update();
+	void swapGFX(irr_gfx* gfx);
+	bool update();
 
 };
 

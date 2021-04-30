@@ -3,11 +3,12 @@
 #include <array>
 #include <vector>
 
-objExport::objExport(btRigidBody* bt_body, IMeshSceneNode* irr_body) : bt_body{ bt_body }, irr_body{ irr_body }
+objExport::objExport(btRigidBody* bt_body, IMeshSceneNode* irr_body) : bt_body{ bt_body }, irr_body{ irr_body }{}
+
+objExport::objExport(btRigidBody* bt_body) : bt_body{ bt_body }
 {
-
+	irr_body = nullptr;
 }
-
 
 void objExport::direct(direction dir)
 {
@@ -56,15 +57,15 @@ void objExport::setTransform_qat(std::array<float, 7> transform_qat)
 
 void objExport::update()
 {
-	btVector3 origin = bt_body->getWorldTransform().getOrigin();
+	//btVector3 origin = bt_body->getWorldTransform().getOrigin();
 	//update rotation
-	btQuaternion rot = bt_body->getWorldTransform().getRotation();
-	quaternion q(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
-	vector3df Euler;
-	q.toEuler(Euler);
-	Euler *= RADTODEG;
+	//btQuaternion rot = bt_body->getWorldTransform().getRotation();
+	//quaternion q(rot.getX(), rot.getY(), rot.getZ(), rot.getW());
+	//vector3df Euler;
+	//q.toEuler(Euler);
+	//Euler *= RADTODEG;
 
-	irr_body->setPosition(vector3df(origin.getX(), origin.getY(), origin.getZ()));
-	irr_body->setRotation(Euler);
-	irr_body->setVisible(true);
+	//irr_body->setPosition(vector3df(origin.getX(), origin.getY(), origin.getZ()));
+	//irr_body->setRotation(Euler);
+	//irr_body->setVisible(true);
 }
