@@ -1,11 +1,10 @@
 #include <iostream>
 #include <array>
-#include <Windows.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include "external\bPhysics.h"
-#include "external\irrlicht.h"
+#include "external/bPhysics.h"
+#include "external/irrlicht.h"
 
 #include "objects/objectWrapper.h"
 #include "objects/complexObject.h"

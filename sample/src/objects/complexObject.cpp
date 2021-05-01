@@ -1,8 +1,8 @@
 #include "complexObject.h"
 
 #include <iostream>
-#include "..\utility\utilities.h"
-#include "..\external\bPhysics.h"
+#include "../utility/utilities.h"
+#include "../external/bPhysics.h"
 
 complex_obj::complex_obj(btRigidBody* bt_body, IMeshSceneNode* irr_body) : objExport(bt_body,irr_body)
 {
