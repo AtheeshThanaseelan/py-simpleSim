@@ -8,7 +8,7 @@
 
 class worldComposite;
 
-static enum direction { up, down, front, back, l_left, l_right, y_left, y_right, neutral };
+enum direction { up, down, front, back, l_left, l_right, y_left, y_right, neutral };
 
 class objExport
 {
