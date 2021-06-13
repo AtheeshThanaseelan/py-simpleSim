@@ -1,11 +1,8 @@
 #include <iostream>
 #include <array>
-#include <Windows.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
-#include "external\bPhysics.h"
-#include "external\irrlicht.h"
+#include "external/bPhysics.h"
+#include "external/irrlicht.h"
 
 #include "objects/objectWrapper.h"
 #include "objects/complexObject.h"
@@ -16,7 +13,34 @@
 #include "utility/irr_debug_draw.h"
 #include "utility/region.h"
 
-namespace py = pybind11;
+
+//what is the main thing
+	//world
+
+
+
+//how do things communicate
+	//drivers
+		//open window or speak through cmd
+		//attach different ones
+	//objects
+		//add to world
+		//communicate through
+
+
+//design
+	//bphys
+		//main world and everything: interface to world
+		//objects: box, etc
+	//irr
+		//graphics handler
+	//world
+		//object wrapper (interfaces)
+		//world wrapper (interfaces)
+	//tui
+		//tui
+	//utilities
+
 
 void test1()
 {
@@ -126,31 +150,31 @@ void test3()
 	}
 }
 
-#if defined _DEBUG
-	int main()
-	{
-		int choice;
-		do {
-			printf("Choose test, 0 to exit: ");
-			std::cin >> choice;
-			switch (choice)
-			{
-			case 1:
-				test1();
-				break;
-			case 2:
-				test2();
-				break;
-			case 3:
-				test3();
-				break;
-			}
-		} while (choice != 0);
+int main()
+{
+	int choice;
+	do {
+		printf("Choose test, 0 to exit: ");
+		std::cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			test1();
+			break;
+		case 2:
+			test2();
+			break;
+		case 3:
+			test3();
+			break;
+		}
+	} while (choice != 0);
 
-		return 0;
-	}
+	return 0;
+}
 
-#else
+
+/*
 PYBIND11_MODULE(physicsEnv, m)
 {
 	//Working with objExport
@@ -187,5 +211,4 @@ PYBIND11_MODULE(physicsEnv, m)
 	m.attr("__version__") = "dev";
 #endif
 }
-
-#endif
+*/
