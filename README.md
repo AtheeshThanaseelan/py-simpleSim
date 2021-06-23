@@ -9,8 +9,10 @@ Supports
 	Irrlicht for Graphics
 	
 
-Usage
-	C++: Use "make" in the c_module_source/src folder to make the executable with graphics support.
-		 Use "make nogfx" in the c_module_source/src folder to make the executable without graphics support.
-		 
-	Python: Use "pip install ." in the c_module_source/src folder to make the python module without graphics support.
+## Usage
+
+C++: Use "make" in the c_module_source/src folder to make the executable with graphics support.
+
+Use "make nogfx" in the c_module_source/src folder to make the executable without graphics support.
+
+Python: Use "pip install ." in the c_module_source/src folder to make the python module without graphics support.
