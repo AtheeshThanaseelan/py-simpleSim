@@ -56,7 +56,7 @@ void test1()
 
 	#endif
 
-	//object_interface* t_obj = phys->addobj(-1);		
+	object_interface* t_obj = phys->addobj(-1);		
 	object_interface* obj = phys->addobj(3);		
 
 	std::array<std::array<int, 2>, 4> vertices = {{{0,0},{0,2},{2,2},{2,0}}};
@@ -69,7 +69,7 @@ void test1()
 		phys->update();
 		std::cout<<obj->getTransform_qat()[5]<<std::endl;
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
-		//g->update();
+		g->update();
 	}
 
 	delete phys;
@@ -91,7 +91,7 @@ void test2()
 
 int main()
 {
-	test2();
+	test1();
 
     return 0;
 }

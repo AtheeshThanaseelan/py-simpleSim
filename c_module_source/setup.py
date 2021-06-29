@@ -6,7 +6,7 @@ from distutils import sysconfig
 
 #cpp_args = ['-std=c++11', '-stdlib=libc++', '-mmacosx-version-min=10.7']
 
-cpp_args = ['-std=c++11','-g']
+cpp_args = ['-std=c++11','-g','-Dgfx']
 
 objects_path = 'src/drivers/bPhysics/objects/*.cpp'
 path_list = glob.glob(objects_path)
@@ -23,6 +23,7 @@ path_list += glob.glob(interface_path)
 path_list.append('src/pyMain.cpp') 
 path_list.append('src/host.cpp') 
 path_list.append('src/drivers/bPhysics/bPhysics.cpp')
+path_list.append('src/drivers/export_btDebug.cpp')
 
 sfc_module = Extension(
     'physicsEnv', sources= path_list, #['src/pyMain.cpp','src/drivers/bPhysics/bPhysics.cpp',objects_list,utils_list,interface_tlis],

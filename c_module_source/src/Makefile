@@ -1,6 +1,6 @@
 INC=-I/usr/include/bullet
 LIB=-Lexternal -Lobjects -Lutilities
-+CFLAGS += -Dgfx
+CFLAGS += -Dgfx
 
 all: main
 

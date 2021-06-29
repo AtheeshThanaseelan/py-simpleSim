@@ -1,7 +1,7 @@
 #pragma once
 #include <bullet/btBulletDynamicsCommon.h>
 #include "../../interfaces/physics_interface.h"
-#include "../irrlicht/irr_debug_draw.h"
+//#include "../irrlicht/irr_debug_draw.h"
 
 class bPhysics: public physics_interface
 {
@@ -12,7 +12,7 @@ class bPhysics: public physics_interface
     btDiscreteDynamicsWorld* dynamicsWorld;
     btSequentialImpulseConstraintSolver* solver;
     btAlignedObjectArray<btCollisionShape*> collisionShapes;
-    irr_btDebug* drawer;
+    btIDebugDraw* drawer;
 
     bPhysics(btIDebugDraw* g);
     ~bPhysics();

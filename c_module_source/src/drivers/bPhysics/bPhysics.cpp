@@ -64,6 +64,7 @@ bPhysics::bPhysics(btIDebugDraw* g)
 		if(g != nullptr)
 		{
 			//drawer = new irr_btDebug();
+			std::cout<<"gfx\n";
 			dynamicsWorld->setDebugDrawer(g);
 		}
 	#endif
@@ -98,7 +99,7 @@ bPhysics::~bPhysics()
 void bPhysics::update()
 {
 	#ifdef gfx
-		drawer->refresh();
+		//drawer->refresh();
 	#endif
 	dynamicsWorld->stepSimulation(1.f / 60.f, 2);
 	dynamicsWorld->debugDrawWorld();
