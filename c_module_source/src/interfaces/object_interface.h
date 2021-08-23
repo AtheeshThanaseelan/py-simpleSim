@@ -11,6 +11,7 @@ class object_interface
 	virtual void direct(direction dir) = 0;
 	virtual std::array<float, 7> getTransform_qat() = 0;
 	virtual std::string getProperties() = 0;
+	virtual void setProperties(std::string props) = 0;
 	virtual void setTransform_qat(std::array<float, 7> transform_qat) = 0;
 	virtual void update() = 0;
 

@@ -5,6 +5,7 @@
 
 #include "host.h"
 #include "interfaces/physics_interface.h"
+#include "interfaces/object_interface.h"
 #include "drivers/bPhysics/bPhysics.h"
 #include "drivers/irrlicht/irr_debug_draw.h"
 #include "drivers/export_btDebug.h"
@@ -17,6 +18,7 @@ PYBIND11_MODULE(physicsEnv, m)
 
 	py::class_<object_interface>(m, "p_object")
 		.def("getProperties", &object_interface::getProperties, R"pbdoc(Get the object properties)pbdoc")
+		.def("setProperties", &object_interface::setProperties, R"pbdoc(Get the object properties)pbdoc")
 		.def("setTransform_qat", &object_interface::setTransform_qat, R"pbdoc(Set the object transform as a quaternion)pbdoc")
 		.def("getTransform_qat", &object_interface::getTransform_qat, R"pbdoc(Get the object transform as a quaternion)pbdoc");
 
@@ -58,7 +60,6 @@ PYBIND11_MODULE(physicsEnv, m)
 		.def("addObject", &host::addObject)
 		.def("getObject", &host::getObject)
 		.def("update", &host::update);
-
 
 
 	#ifdef VERSION_INFO

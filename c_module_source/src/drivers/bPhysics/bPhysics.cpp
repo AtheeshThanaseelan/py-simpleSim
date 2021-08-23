@@ -1,8 +1,8 @@
 #include "bPhysics.h"
 #include "objects/box.h"
-#include "objects/ex_complex.h"
 #include "objects/compound.h"
 #include "objects/ground.h"
+#include "bP_obj.h"
 #include <array>
 #include <iostream>
 
@@ -110,16 +110,13 @@ object_interface* bPhysics::addobj(int index)
 	object_interface* obj = nullptr;
 	switch(index){
 		case -1:
-			obj = new bPhys_ground(this);
+			//obj = new bPhys_ground(this);
 			break;
 		case 1:
 			obj = new bPhys_box(this);
 			break;
-		case 2:
-			obj = new bPhys_ex_complex(this);
-			break;
 		case 3:
-			obj = new bPhys_compound(this);
+			//obj = new bPhys_compound(this);
 			break;
 	}
 

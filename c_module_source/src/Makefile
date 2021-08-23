@@ -38,13 +38,13 @@ debug: main.cpp
 		-lBullet3Dynamics -lBullet3Collision -lBulletCollision -lBulletDynamics
 
 debug_gfx: main2.cpp
-	cd interfaces/ && gcc -g -Wall $(INC) $(CFLAGS) -c host.cpp
+	gcc -Wall $(INC) $(CFLAGS) -c host.cpp
 	cd drivers/bPhysics && gcc -g -Wall $(INC) $(CFLAGS) -c bPhysics.cpp
 	cd drivers/bPhysics/objects && gcc -g -Wall $(INC) $(CFLAGS) -c *.cpp
 	cd drivers/irrlicht && gcc -g -Wall $(INC) $(CFLAGS) -c *.cpp
 	cd utility && gcc -g -Wall -c region.cpp
 	
-	gcc -g $(CFLAGS) -Wall $(INC) -o main main2.cpp utility/*.o interfaces/host.o drivers/bPhysics/bPhysics.o drivers/bPhysics/objects/*.o \
+	gcc -g $(CFLAGS) -Wall $(INC) -o main main2.cpp utility/*.o host.o drivers/bPhysics/bPhysics.o drivers/bPhysics/objects/*.o \
 		drivers/irrlicht/irr_debug_draw.o -lstdc++ -lm -lIrrlicht -lLinearMath \
 		-lBullet3Dynamics -lBullet3Collision -lBulletCollision -lBulletDynamics
 	

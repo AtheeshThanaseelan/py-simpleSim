@@ -25,7 +25,7 @@ public:
     void setGfx(graphics_interface* newgfx);
     //void setUsrInp(userinput_interface* newusrinp);
 
-    void addObject(int index);
+    object_interface* addObject(int index);
     void addUtility(utility_interface* utility);
 
     object_interface* getObject(int index);

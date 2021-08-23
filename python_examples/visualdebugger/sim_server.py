@@ -5,7 +5,7 @@ import time
 import numpy
 
 T_PORT = 16543
-TCP_IP = '192.168.2.41'
+TCP_IP = '127.0.0.1'
 BUF_SIZE = 1024
 
 def serve_gfx(data):
@@ -36,14 +36,14 @@ if __name__ == "__main__":
     #g = physicsEnv.irr_btDebug(True)
     exp = physicsEnv.export_btDebug()
     w = physicsEnv.host(exp)
-    w.addObject(1)
-    o = w.getObject(0)
+    o = w.addObject(1)
+    #o = w.getObject(0)
 
     for x in range(10):
         #print(o.getTransform_qat())
         w.update()        
         lst = exp.getLines()
-        print(lst)
+        print(exp.getLines())
         arr = numpy.asarray(lst)
         print(arr.dtype)
         serve_gfx(arr)

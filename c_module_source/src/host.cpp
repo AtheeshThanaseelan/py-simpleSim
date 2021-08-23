@@ -1,5 +1,5 @@
 #include "host.h"
-
+#include <iostream>
 
 host::host()
 {
@@ -24,21 +24,30 @@ void host::setGfx(graphics_interface* newgfx)
 1: box
 2: complex(old)
 3: compound
+DO NOT USE 0
 */
-void host::addObject(int index)
+object_interface* host::addObject(int index)
 {
+    object_interface* o = nullptr;
     if (m_phys != nullptr)
-        objects.push_back(m_phys->addobj(index));
+    {
+        o = m_phys->addobj(index);
+        objects.push_back(o);
+    }
+    return o; 
 }
 
 
 object_interface* host::getObject(int index)
 {
+    std::cout<<"pls";
     if (m_phys != nullptr)
     {
         object_interface* obj = objects.at(index);
+        std::cout<<"got";
         return obj;
     }
+    std::cout<<"none";
     return nullptr;
 }
 

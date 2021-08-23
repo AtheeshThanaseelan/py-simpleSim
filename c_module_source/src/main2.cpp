@@ -40,7 +40,19 @@
 
 
 //2
-	//
+	//Objects
+	//Basic object can have things attached to it
+		//Physical: Provide mass, pos, etc
+		//Systems: Perform functions
+	
+	//Object
+		//Attach_phys
+			//Accept physics object interface
+		//Attach_func
+			//Attach python object?
+
+
+
 
 
 void test1()
@@ -78,20 +90,21 @@ void test1()
 void test2()
 {
 	host* h = new host();
-	h->setPhys(new bPhysics(nullptr));
-	//h->addObject(3);
+	irr_btDebug* g = new irr_btDebug();
+	h->setPhys(new bPhysics(g));
+	h->addObject(1);
 	//std::cout<<"host \n";
-	for(int i =0; i<1*20;i++)
+	for(int i =0; i<2000;i++)
 	{
 		h->update();
-		//std::cout<<h->getObject(0)->getTransform_qat()[5]<<std::endl;
+		std::cout<<h->getObject(0)->getTransform_qat()[5]<<std::endl;
 		//std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
 }
 
 int main()
 {
-	test1();
+	test2();
 
     return 0;
 }
