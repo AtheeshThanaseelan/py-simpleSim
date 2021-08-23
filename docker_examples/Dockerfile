@@ -12,6 +12,6 @@ WORKDIR "/work"
 RUN git clone https://github.com/pybind/pybind11.git
 RUN cp -r pybind11/include/pybind11 /usr/include/
 RUN git clone https://github.com/AtheeshThanaseelan/CPlusPlus-Physics-Environment.git
-RUN pip3 install CPlusPlus-Physics-Environment/sample/
+RUN pip3 install CPlusPlus-Physics-Environment/c_module_source/sim
 RUN bash
 
