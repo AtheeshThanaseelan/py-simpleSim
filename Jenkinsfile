@@ -1,11 +1,11 @@
 pipeline {
-    agent {
-        docker { image 'ubuntu:18.04' }
-    }
+    agent { dockerfile true }
 
     stages {
         stage('Build') {
             steps {
+		sh 'ls'
+		sh 'ls /usr/include'
                 echo 'Building..'
             }
         }
