@@ -1,9 +1,9 @@
 pipeline {
+    agent none
+
     stages {
         stage('Build') {
-            agent{
-                dockerfile true
-            }
+            agent{Dockerfile true}
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
@@ -33,6 +33,7 @@ pipeline {
             }
         }
         stage('Deliver') {
+            agent any
             steps {
                 echo 'Deploying....'
                 archiveArtifacts "build/physicsEnv*.whl"
