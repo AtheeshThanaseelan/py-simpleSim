@@ -6,7 +6,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
-                stash(name: 'compiled-results', includes: 'build/*.pyc*')	
+                //stash(name: 'compiled-results', includes: 'build/*.pyc*')	
             }
         }
         stage('Test') {
