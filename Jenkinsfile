@@ -20,8 +20,8 @@ pipeline {
             */
             steps {
                 echo 'Testing..'
-                sh 'pip install build/physicsEnv*.whl'
-                sh 'pip install pytest'
+                sh 'python3 -m pip install build/physicsEnv*.whl'
+                sh 'python3 -m pip install pytest'
                 sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
 		
             }
