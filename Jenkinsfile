@@ -1,8 +1,9 @@
 pipeline {
-    agent { dockerfile true }
-
     stages {
         stage('Build') {
+            agent{
+                dockerfile true
+            }
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
@@ -11,17 +12,17 @@ pipeline {
             }
         }
         stage('Test') {
-            /*
+            
             agent{
                 docker{
                     image 'qnib/pytest'
                 }
             }
-            */
+            
             steps {
                 echo 'Testing..'
-                sh 'python3 -m pip install build/physicsEnv*.whl'
-                sh 'python3 -m pip install pytest'
+                //sh 'python3 -m pip install build/physicsEnv*.whl'
+                //sh 'python3 -m pip install pytest'
                 sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
 		
             }
