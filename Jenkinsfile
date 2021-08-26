@@ -5,13 +5,17 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh 'ls'
-                sh 'ls /usr/include'
+                sh 'python3 -m pip install --upgrade build'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
                 stash(name: 'compiled-results', includes: 'build/*.pyc*')	
             }
         }
         stage('Test') {
+            agent{
+                docker{
+                    image 'qnib/pytest'
+                }
+            }
             steps {
                 echo 'Testing..'
                 sh 'pip install build/physicsEnv*.whl'
@@ -25,9 +29,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deliver') {
             steps {
                 echo 'Deploying....'
+                archiveArtifacts "build/physicsEnv*.whl"
             }
         }
     }
