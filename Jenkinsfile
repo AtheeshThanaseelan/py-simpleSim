@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         stage('Build') {
-            agent{Dockerfile true}
+            agent{dockerfile true}
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
