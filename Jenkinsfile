@@ -11,11 +11,13 @@ pipeline {
             }
         }
         stage('Test') {
+            /*
             agent{
                 docker{
                     image 'qnib/pytest'
                 }
             }
+            */
             steps {
                 echo 'Testing..'
                 sh 'pip install build/physicsEnv*.whl'
