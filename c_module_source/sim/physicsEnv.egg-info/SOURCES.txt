@@ -1,0 +1,14 @@
+setup.py
+physicsEnv.egg-info/PKG-INFO
+physicsEnv.egg-info/SOURCES.txt
+physicsEnv.egg-info/dependency_links.txt
+physicsEnv.egg-info/top_level.txt
+src/host.cpp
+src/pyMain.cpp
+src/drivers/export_btDebug.cpp
+src/drivers/bPhysics/bPhysics.cpp
+src/drivers/bPhysics/objects/box.cpp
+src/drivers/bPhysics/objects/compound.cpp
+src/drivers/bPhysics/objects/ground.cpp
+src/drivers/irrlicht/irr_debug_draw.cpp
+src/utility/region.cpp
