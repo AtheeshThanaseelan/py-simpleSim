@@ -12,7 +12,6 @@ pipeline {
             }
         }
         stage('Test') {
-            
             agent{
                 dockerfile{
                     dir 'build_scripts'
@@ -20,6 +19,12 @@ pipeline {
             }
             
             steps {
+                unstash 'compiled-results'
+                sh """
+                    . .env/bin/activate
+                    pip install build/physicsEnv*.whl
+                    """
+                /*
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     unstash 'compiled-results'
                     sh 'ls'
@@ -28,6 +33,7 @@ pipeline {
                     sh 'python3 -m pip install build/physicsEnv*.whl'
                     sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
                 }
+                */
             }
             post {
                 always {
