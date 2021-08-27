@@ -27,7 +27,7 @@ pipeline {
                     . /venv/bin/activate
                     pip install build/physicsEnv*.whl
                     """
-                sh 'pytest --junit-xml test-reports/results.xml build_scripts/testing_stage/test_sample.py'
+                sh 'pytest --junit-xml test-reports/results.xml build_scripts/testing_stage/tests.py'
             }
             post {
                 always {
