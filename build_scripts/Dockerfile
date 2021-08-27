@@ -7,4 +7,5 @@ RUN apt update && apt install -y \
 	python3-venv
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pytest
+USER jenkins
 RUN python3 -m venv ~/venv

@@ -20,9 +20,9 @@ pipeline {
             
             steps {
                 unstash 'compiled-results'
-                sh 'ls /root'
+                sh 'ls /home/jenkins'
                 sh """
-                    . /root/venv/bin/activate
+                    . /home/jenkins/venv/bin/activate
                     pip install build/physicsEnv*.whl
                     """
                 /*
