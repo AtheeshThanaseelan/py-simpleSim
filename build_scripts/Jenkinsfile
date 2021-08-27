@@ -22,6 +22,7 @@ pipeline {
             
             steps {
                 unstash 'compiled-results'
+                sh 'ls'
                 sh """
                     . /venv/bin/activate
                     pip install build/physicsEnv*.whl
