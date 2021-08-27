@@ -1,18 +1,25 @@
-def collisions(x):
-    return x + 1
+import physicsEnv
 
-def setProp_gravity(x):
-	return x
+def collisions():
+    host = physicsEnv.host(False)
+    o = host.addObject(1)
+    o2 = host.addObject(1)
+    o2.setProperties("static")
+    o.setTransform_qat([0.5,0.5,0.5,0.5,0,4,0])
+    for x in range(0,600):
+        host.update()   
+    x = o.getTransform_qat()
+    return x
 
-def setTransform(x):
-	return x
-
+def setTransform():
+    host = physicsEnv.host(False)
+    o = host.addObject(1)
+    o.setTransform_qat([0.5,0.5,0.5,0.5,3.0,1.0,3.0])  
+    x = o.getTransform_qat()
+    return x
 
 def test_collisions():
-    assert collisions(3) == 4
-
-def test_setGrav():
-    assert setProp_gravity(3) == 3
+    assert collisions() == [0.5000028014183044, 0.4999975562095642, 0.49999725818634033, 0.500002384185791, 0.0002511556085664779, 1.9999995231628418, 0.0012792845955118537]
 
 def test_setTransform():
-    assert setTransform(3) == 3
+    assert setTransform() == [0.5,0.5,0.5,0.5,3.0,1.0,3.0]
