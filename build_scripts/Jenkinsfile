@@ -26,6 +26,7 @@ pipeline {
                 sh """
                     . /venv/bin/activate
                     pip install build/physicsEnv*.whl
+                    pip install -m pytest
                     pytest --junit-xml test-reports/results.xml build_scripts/testing_stage/tests.py
                     """
             }
