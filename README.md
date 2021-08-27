@@ -11,6 +11,7 @@ Supports
 	
 ## Installing
 Download the wheel file from the releases page
+
 Then, run "pip install physicsEnv*.whl" in the folder where the wheel was downloaded
 
 
