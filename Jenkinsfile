@@ -24,6 +24,7 @@ pipeline {
                     unstash 'compiled-results'
                     sh 'ls'
                     echo 'Testing..'
+                    sh 'pip debug --verbose'
                     sh 'python3 -m pip install build/physicsEnv*.whl'
                     sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
                 }
