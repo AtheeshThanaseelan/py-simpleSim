@@ -4,6 +4,7 @@ RUN apt update && apt install -y \
 	build-essential \
 	git \
 	libbullet-dev \
+	libirrlicht-dev \
 	python3-pip \
 	python3-venv
 RUN python3 -m pip install --upgrade pip

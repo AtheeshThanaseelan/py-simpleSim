@@ -26,9 +26,15 @@ pipeline {
                 sh """
                     . /venv/bin/activate
                     pip install build/physicsEnv*.whl
-                    pip install pytest
-                    pytest --junit-xml test-reports/results.xml build_scripts/testing_stage/tests.py
                     """
+                sh """
+                    . /venv/bin/activate
+                    pip install pytest
+                   """
+                sh """
+                    . /venv/bin/activate
+                    pytest --junit-xml test-reports/results.xml build_scripts/testing_stage/tests.py
+                   """
             }
             post {
                 always {
