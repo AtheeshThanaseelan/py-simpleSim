@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
-                sh 'ls build/'
+                //sh 'ls build/'
                 stash(name: 'compiled-results', includes: 'build/*.whl')	
             }
         }
@@ -20,6 +20,8 @@ pipeline {
             }
             
             steps {
+                unstash 'compiled-results'
+                sh 'ls'
                 echo 'Testing..'
                 //sh 'python3 -m pip install build/physicsEnv*.whl'
                 //sh 'python3 -m pip install pytest'

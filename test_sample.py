@@ -1,12 +1,18 @@
-def test_collisions(x):
+def collisions(x):
     return x + 1
 
-def test_properties_gravity(x):
+def setProp_gravity(x):
 	return x
 
-def test_setTransform(x):
+def setTransform(x):
 	return x
 
 
-def test_answer():
-    assert func(3) == 4
+def test_collisions():
+    assert collisions(3) == 4
+
+def test_setGrav():
+    assert setProp_gravity(3) == 3
+
+def test_setTransform():
+    assert setTransform(3) == 3
