@@ -20,13 +20,14 @@ pipeline {
             }
             
             steps {
-                unstash 'compiled-results'
-                sh 'ls'
-                echo 'Testing..'
-                //sh 'python3 -m pip install build/physicsEnv*.whl'
-                //sh 'python3 -m pip install pytest'
-                sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
-		
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    unstash 'compiled-results'
+                    sh 'ls'
+                    echo 'Testing..'
+                    sh 'python3 -m pip install build/physicsEnv*.whl'
+                    //sh 'python3 -m pip install pytest'
+                    sh 'pytest --junit-xml test-reports/results.xml test_sample.py'
+                }
             }
             post {
                 always {
