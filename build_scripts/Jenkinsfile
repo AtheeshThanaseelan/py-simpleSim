@@ -1,26 +1,23 @@
 pipeline {
     agent none
-
     stages {
         stage('Build') {
             agent{dockerfile true}
             steps {
                 echo 'Building..'
                 sh 'python3 -m build --wheel --outdir build/ c_module_source/sim/'	
-                //sh 'ls build/'
                 stash(name: 'compiled-results', includes: 'build/*.whl')	
             }
         }
         stage('Test') {
             agent{
                 dockerfile{
-                    dir 'build_scripts'
+                    dir 'build_scripts/testing_stage'
                 }
             }
             
             steps {
                 unstash 'compiled-results'
-                sh 'ls /'
                 sh """
                     . /venv/bin/activate
                     pip install build/physicsEnv*.whl

@@ -4,7 +4,7 @@
 #include "export_btDebug.h"
 
 
-std::vector<float> export_btDebug::getLines()
+std::vector<std::array<float, 6>> export_btDebug::getLines()
 {
 	return lines;
 }
@@ -26,13 +26,15 @@ export_btDebug::export_btDebug()
 
 void   export_btDebug::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
 {
-	lines.push_back(from.x());
-	lines.push_back(from.y());
-	lines.push_back(from.z());
-	lines.push_back(to.x());
-	lines.push_back(to.y());
-	lines.push_back(to.z());
-	std::cout<<lines.size()<<std::endl;
+	std::array<float,6> line;
+	line[0]=from.x();
+	line[1]=from.y();
+	line[2]=from.z();
+	line[3]=to.x();
+	line[4]=to.y();
+	line[5]=to.z();
+	lines.push_back(line);	
+	//std::cout<<line.size()<<std::endl;
 	//std::cout<<"poh\n";
 }
 

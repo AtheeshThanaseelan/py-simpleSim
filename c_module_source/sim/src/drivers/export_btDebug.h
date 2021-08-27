@@ -9,8 +9,8 @@ class export_btDebug : public btIDebugDraw, public graphics_interface
 	int m_debugMode;
 
 public:
-
-    std::vector<float> lines;
+	std::vector<std::array<float, 6>> lines;
+    //std::vector<float> lines;
 
 	export_btDebug();
 
@@ -29,6 +29,6 @@ public:
 	void add_line(std::array<float, 6> line);
     void update();
 
-    std::vector<float> getLines();
+    std::vector<std::array<float, 6>> getLines();
 
 };

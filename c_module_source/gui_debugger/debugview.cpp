@@ -33,6 +33,8 @@ void debugview::add_line(std::array<float, 6> line)
 	lines.push_back(line);
 }
 
+//void debugview::set_lines(std::vecot)
+
 void debugview::update()
 {
 	driver->beginScene(true, true, video::SColor(180, 0, 0, 255));
@@ -44,7 +46,7 @@ void debugview::update()
 
 		SMaterial m;
 		m.Lighting = false;
-		m.Thickness = 7.5f;
+		m.Thickness = 17.5f;
 		driver->setMaterial(m);
 		driver->setTransform(video::ETS_WORLD, core::matrix4());
 		driver->draw3DLine(start, end, SColor(0, 180, 0, 255));
