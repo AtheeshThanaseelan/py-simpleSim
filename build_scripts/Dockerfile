@@ -8,3 +8,4 @@ RUN apt update && apt install -y \
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pytest
 RUN python3 -m venv /venv
+RUN chmod -R a+rwX /venv/
