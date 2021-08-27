@@ -20,9 +20,9 @@ pipeline {
             
             steps {
                 unstash 'compiled-results'
-                sh 'ls ~/'
+                sh 'ls /root'
                 sh """
-                    . ~/venv/bin/activate
+                    . /root/venv/bin/activate
                     pip install build/physicsEnv*.whl
                     """
                 /*
